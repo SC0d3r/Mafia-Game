@@ -14,6 +14,11 @@ public class WriteThread extends Thread {
     this.client = client;
 
     try {
+      try {
+        Thread.sleep(10);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
       OutputStream output = socket.getOutputStream();
       this.wirter = new PrintWriter(output, true);
     } catch (IOException ex) {
@@ -26,14 +31,28 @@ public class WriteThread extends Thread {
   public void run() {
     Console console = System.console();
 
-    String username = console.readLine("\nEnter Username: ");
-    this.client.setUsername(username);
-    this.wirter.println(username);
+    boolean isUserAdded = false;
+    String username = "";
+    while (!isUserAdded) {
+      username = console.readLine("\nEnter Username: ");
 
-    String text;
+      if (this.client.doesUsernameExists(username)) {
+        System.out.println("This user name already exists!");
+        continue;
+      }
+
+      this.wirter.println(username);
+      this.client.setUsername(username);
+      isUserAdded = true;
+    }
+
+    String text = "";
     do {
-      text = console.readLine("<" + username + ">: ");
-      this.wirter.println(text);
+      if (!this.client.getIsChatDisabled()) {
+        text = console.readLine(username + ": ");
+
+        this.wirter.println(text);
+      }
     } while (!text.equals("exit"));
 
     try {
