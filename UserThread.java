@@ -6,20 +6,35 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class UserThread extends Thread {
   private Socket socket;
   private GameServer gameServer;
   private PrintWriter writer;
+  private String username;
+  private SocketDataSender dataSender;
 
   public UserThread(Socket socket, GameServer gameServer) {
     this.socket = socket;
     this.gameServer = gameServer;
+    this.username = "";
+    this.dataSender = new SocketDataSender();
 
+  }
+
+  public boolean hasUsername(String username) {
+    return this.username.equals(username);
+  }
+
+  public String getUsername() {
+    return this.username;
   }
 
   @Override
   public void run() {
+    String username = "";
     try {
       InputStream input = this.socket.getInputStream();
       BufferedReader reader = new BufferedReader(new InputStreamReader(input));
@@ -27,46 +42,91 @@ public class UserThread extends Thread {
       OutputStream output = this.socket.getOutputStream();
       this.writer = new PrintWriter(output, true);
 
-      this.printUsers();
+      username = reader.readLine();
 
-      boolean isAdded = false;
-      String username = "";
-      while (!isAdded) {
-        System.out.print("Username> ");
-        username = reader.readLine();
-        isAdded = this.gameServer.addUserName(username);
-      }
-
+      this.username = username.trim();
       String serverMessage = "New User Connected: " + username;
-      this.gameServer.broadcast(serverMessage, this);
+      String newUserConnected = this.dataSender.createChatCommand("__ " + username + " Connected to lobby __");
+      this.gameServer.broadcast(newUserConnected, this);
 
-      String clientMessage;
+      this.gameServer.waitingLobbyInfo(username);
+
+      String clientMessage = "";
       do {
+
+        System.out.println("FROM user " + username + " message : " + clientMessage);
+
+        if (!this.gameServer.getIsGameStarted() && this.gameServer.canBeginTheGame()) {
+          for (Player p : this.gameServer.getReadyPlayers()) {
+            p.sendMessage(SocketDataSender.BEGIN_GAME);
+            p.sendMessage("\n :::: WELCOME TO MAFIA GAME ::::");
+          }
+          this.sleep(2000);
+          // 2 bellow lines fixes the blocking issue, Otherwise this thread will be busy
+          // to recieve or send this user messages
+          ExecutorService myExecutor = Executors.newCachedThreadPool();
+          myExecutor.execute(new Narrator(this.gameServer, GameData.getInstance()));
+          continue;
+        }
         clientMessage = reader.readLine();
-        serverMessage = username + ": " + clientMessage;
-        this.gameServer.broadcast(serverMessage, this);
+        if (!this.gameServer.getIsGameStarted() && clientMessage.equals("!ready")) {
+          this.gameServer.registerForGame(username, this);
+          this.sleep(10);
+          this.gameServer.waitingLobbyInfo(username);
+          this.sendMessage(this.dataSender.createChatCommand("... you are ready ..."));
+          continue;
+        }
+        if (clientMessage.equals("!list")) {
+          String cmdMessage = this.dataSender
+              .createChatCommand("(Users) " + String.join(", ", this.gameServer.getUsernames()));
+          this.sendMessage(cmdMessage);
+          continue;
+        }
+
+        if (!this.gameServer.getIsGameStarted()) {
+          this.gameServer.waitingLobbyInfo(username);
+        }
+
+        serverMessage = this.dataSender.createChatMessage(username, clientMessage);
+        if (!this.gameServer.getIsGameStarted()) {
+
+          for (UserThread user : this.gameServer.getUserThreads()) {
+            user.sendMessage(serverMessage);
+          }
+        } else {
+          for (Player p : this.gameServer.getReadyPlayers()) {
+            p.sendMessage(serverMessage);
+          }
+        }
       } while (!clientMessage.equals("exit"));
 
-      this.gameServer.removeUser(username, this);
       this.socket.close();
-
-      serverMessage = username + "Quit the game!";
-      this.gameServer.broadcast(serverMessage, this);
     } catch (IOException ex) {
       System.out.println("UserThread Error: " + ex.getMessage());
       ex.printStackTrace();
+    } finally {
+      this.gameServer.removeUser(username, this);
+      String chatCMD = this.dataSender.createChatCommand("< " + username + " left the game >");
+      this.gameServer.broadcast(chatCMD, this);
+      try {
+        Thread.sleep(10);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      this.gameServer.waitingLobbyInfo(username);
     }
   }
 
-  private void printUsers() {
-    if (this.gameServer.hasUsers()) {
-      this.writer.println("Connected users: " + this.gameServer.getUsernames());
-    } else {
-      this.writer.println("There is no online user!");
+  private void sleep(int ms) {
+    try {
+      Thread.sleep(ms);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
+
   }
 
-  public void sendMessage(String message) {
+  public synchronized void sendMessage(String message) {
     this.writer.println(message);
   }
 }
