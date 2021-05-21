@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,12 +14,15 @@ public class UserThread extends Thread {
   private PrintWriter writer;
   private String username;
   private SocketDataSender dataSender;
+  private SocketDataReciever dataReciever;
 
-  public UserThread(Socket socket, GameServer gameServer) {
+  public UserThread(Socket socket, GameServer gameServer, SocketDataReciever dataReciever) {
     this.socket = socket;
     this.gameServer = gameServer;
     this.username = "";
     this.dataSender = new SocketDataSender();
+    // this.dataReciever = new SocketDataReciever();
+    this.dataReciever = dataReciever;
 
   }
 
@@ -54,9 +56,11 @@ public class UserThread extends Thread {
       String clientMessage = "";
       do {
 
-        System.out.println("FROM user " + username + " message : " + clientMessage);
+        // System.out.println("FROM user " + username + " message : " + clientMessage);
 
         if (!this.gameServer.getIsGameStarted() && this.gameServer.canBeginTheGame()) {
+          this.gameServer.setIsGameStarted(true);// this is for not entering this if statement and making another
+                                                 // instances of Narrator
           for (Player p : this.gameServer.getReadyPlayers()) {
             p.sendMessage(SocketDataSender.BEGIN_GAME);
             p.sendMessage("\n :::: WELCOME TO MAFIA GAME ::::");
@@ -69,6 +73,29 @@ public class UserThread extends Thread {
           continue;
         }
         clientMessage = reader.readLine();
+        if (this.dataReciever.isVotingMapForServer(clientMessage)) {
+          // creating the voting map
+          synchronized (this) {
+            // updates the votes hashmap in dataReciever
+            this.dataReciever.addVotingMapServerSide(clientMessage);
+          }
+
+          for (Player p : this.gameServer.getReadyPlayers()) {
+            // System.out.println(this.dataSender.createVoteMapClientSide(clientMessage));
+            p.sendMessage(this.dataSender.createVoteMapClientSide(this.dataReciever.getVotes()));
+          }
+          continue;
+        }
+
+        if (this.dataReciever.isMayorVote(clientMessage)) {
+          boolean vote = this.dataReciever.doesMayorCancelVoting(clientMessage);
+          // this.gam
+          GameData gd = GameData.getInstance();
+          gd.setIsVotingGotCanceled(vote);
+          continue;
+        }
+
+        // if(this.da)
         if (!this.gameServer.getIsGameStarted() && clientMessage.equals("!ready")) {
           this.gameServer.registerForGame(username, this);
           this.sleep(10);
