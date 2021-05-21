@@ -12,21 +12,49 @@ public class GameClient {
   private int port;
   private String username;
   // private Set<String> inGameUsernames;
-  private boolean isChatDisabled;
+  // private boolean isChatDisabled;
+  private Player player;
+  private boolean isInMayorVotingState;
 
   public GameClient(String hostname, int port) {
     this.port = port;
     this.hostname = hostname;
     // this.inGameUsernames = GameClient.fetchUsernames("usernames.txt");
-    this.isChatDisabled = false;
+    // this.isChatDisabled = false;
+    this.isInMayorVotingState = false;
   }
 
-  public void setIsChatDisabled(boolean status) {
-    this.isChatDisabled = status;
+  public void setPlayer(Player p) {
+    this.player = p;
   }
 
-  public boolean getIsChatDisabled() {
-    return this.isChatDisabled;
+  public void setIsInMayorVotingState(boolean state) {
+    this.isInMayorVotingState = state;
+  }
+
+  public boolean getIsInMayorVotingState() {
+    return this.isInMayorVotingState;
+  }
+
+  public boolean isRole(ROLE role) {
+    return this.player.getRole() == role;
+  }
+
+  // public void setIsChatDisabled(boolean status) {
+  // this.isChatDisabled = status;
+  // }
+
+  public boolean getCanChat() {
+    if (this.player == null)
+      return true;
+    return this.player.getCanChat();
+    // return this.isChatDisabled;
+  }
+
+  public boolean isAlive() {
+    if (this.player == null) // user is not in game , is in the lobby
+      return true;
+    return this.player.getIsAlive();
   }
 
   public boolean doesUsernameExists(String username) {
@@ -40,13 +68,14 @@ public class GameClient {
       Socket socket = new Socket(this.hostname, this.port);
       System.out.println("Successfully connected to server!");
 
-      new ReadThread(socket, this).start();
+      SocketDataReciever socketData = new SocketDataReciever();
+      new ReadThread(socket, this, socketData).start();
       try {
         Thread.sleep(10);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
-      new WriteThread(socket, this).start();
+      new WriteThread(socket, this, socketData).start();
 
     } catch (UnknownHostException ex) {
       System.out.println("Server not found: " + ex.getMessage());
