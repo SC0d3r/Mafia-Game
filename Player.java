@@ -21,11 +21,12 @@ public class Player {
   public String serialize() {
     // TODO: add isSilent field to player to be used when Psychologist silences a
     // user
-    return this.role + "@" + this.isALive + "@" + this.canChat + "@" + this.username;
+    return this.role + SocketDataSender.SECONDARY_SEPERATOR + this.isALive + SocketDataSender.SECONDARY_SEPERATOR
+        + this.canChat + SocketDataSender.SECONDARY_SEPERATOR + this.username;
   }
 
   public static Player deserialize(String serializedData) {
-    String[] datas = serializedData.split("@");
+    String[] datas = serializedData.split(SocketDataSender.SECONDARY_SEPERATOR);
 
     ROLE role = ROLE.valueOf(datas[0]);
     boolean isAlive = Boolean.valueOf(datas[1]);
