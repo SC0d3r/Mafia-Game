@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 enum DAYTIME {
   DAY, NIGHT;
 
@@ -11,9 +13,41 @@ enum DAYTIME {
 public class GameData {
   private static GameData instance;
   private volatile DAYTIME daytime;
+  private ArrayList<String> news;
+  private boolean isVotingGotCanceled;
 
   private GameData() {
     this.daytime = DAYTIME.NIGHT;
+    this.news = new ArrayList<>();
+    this.isVotingGotCanceled = false;
+  }
+
+  public void setIsVotingGotCanceled(boolean state) {
+    this.isVotingGotCanceled = state;
+  }
+
+  public void clearNews() {
+    this.news = new ArrayList<>();
+  }
+
+  public boolean isThereAnyNews() {
+    return !this.news.isEmpty();
+  }
+
+  public boolean getIsVotingGotCanceled() {
+    return this.isVotingGotCanceled;
+  }
+
+  public boolean isDay() {
+    return this.daytime == DAYTIME.DAY;
+  }
+
+  public void addNews(String news) {
+    this.news.add(news);
+  }
+
+  public ArrayList<String> getNews() {
+    return this.news;
   }
 
   public void updateDayTime(DAYTIME dt) {
