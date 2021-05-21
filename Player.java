@@ -13,11 +13,48 @@ public class Player {
     this.user = user;
   }
 
+  public void kill() {
+    this.isALive = false;
+    this.canChat = false;
+  }
+
+  public String serialize() {
+    // TODO: add isSilent field to player to be used when Psychologist silences a
+    // user
+    return this.role + "@" + this.isALive + "@" + this.canChat + "@" + this.username;
+  }
+
+  public static Player deserialize(String serializedData) {
+    String[] datas = serializedData.split("@");
+
+    ROLE role = ROLE.valueOf(datas[0]);
+    boolean isAlive = Boolean.valueOf(datas[1]);
+    boolean canChat = Boolean.valueOf(datas[2]);
+    String username = datas[3];
+
+    Player p = new Player(username, role, null);
+    p.setIsAlive(isAlive);
+    p.setCanChat(canChat);
+    return p;
+  }
+
+  public void setIsAlive(boolean isAlive) {
+    this.isALive = isAlive;
+  }
+
+  public void setCanChat(boolean canChat) {
+    this.canChat = canChat;
+  }
+
   public String getUsername() {
     return this.username;
   }
 
   public synchronized void sendMessage(String message) {
+    if (this.user == null) {
+      System.out.println("ERROR: From client you cant send message with player object");
+      return;
+    }
     this.user.sendMessage(message);
   }
 
