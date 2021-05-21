@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
-// public class Narrator extends Thread {
-
 public class Narrator implements Runnable {
   private GameServer server;
   private GameData gameData;
@@ -17,12 +15,18 @@ public class Narrator implements Runnable {
   }
 
   public void initPlayers() {
-    ArrayList<ROLE> roles = this.createRoles(this.server.getReadyPlayers().size());
-    int i = 0;
+    this.setPlayersRoles();
+    this.sendPlayerStateToClient();
+    this.createPlayersHeaderInfoBar();
+  }
+
+  private void sendPlayerStateToClient() {
     for (Player p : this.server.getReadyPlayers()) {
-      p.setRole(roles.get(i));
-      i++;
+      p.sendMessage(this.dataSender.createPlayerState(p));
     }
+  }
+
+  private void createPlayersHeaderInfoBar() {
     for (Player p : this.server.getReadyPlayers()) {
       String isAlive = this.dataSender.createInfo("Alive", p.getIsAlive() ? "YES" : "NO");
       String timeOfDay = this.dataSender.createInfo("TIME", DAYTIME.toString(this.gameData.getDayTime()));
@@ -34,7 +38,24 @@ public class Narrator implements Runnable {
       this.sleep(0, 0, 40);
       p.sendMessage(role);
       this.sleep(0, 0, 40);
-      // p.sendMessage(SocketDataSender.DISABLE_CHAT);
+      p.sendMessage(SocketDataSender.DISABLE_CHAT);
+    }
+  }
+
+  private boolean isThereMayorInGame() {
+    for (Player p : this.server.getReadyPlayers()) {
+      if (p.getRole() == ROLE.MAYOR)
+        return true;
+    }
+    return false;
+  }
+
+  private void setPlayersRoles() {
+    ArrayList<ROLE> roles = this.createRoles();
+    int i = 0;
+    for (Player p : this.server.getReadyPlayers()) {
+      p.setRole(roles.get(i));
+      i++;
     }
   }
 
@@ -46,9 +67,10 @@ public class Narrator implements Runnable {
     }
   }
 
-  private ArrayList<ROLE> createRoles(int howManyPlayers) {
-    ROLE[] allRoles = { ROLE.GOD_FATHER, ROLE.DR_CITY, ROLE.DETECTIVE, ROLE.PROFESSIONAL, ROLE.PSYCHOLOGIST,
-        ROLE.DR_LACTER, ROLE.MAYOR, ROLE.DIE_HARD, ROLE.CITIZEN, ROLE.MAFIA_MEMBER };
+  private ArrayList<ROLE> createRoles() {
+    int howManyPlayers = this.server.getReadyPlayers().size();
+    ROLE[] allRoles = { ROLE.GOD_FATHER, ROLE.MAYOR, ROLE.DR_CITY, ROLE.DETECTIVE, ROLE.PROFESSIONAL, ROLE.PSYCHOLOGIST,
+        ROLE.DR_LACTER, ROLE.DIE_HARD, ROLE.CITIZEN, ROLE.MAFIA_MEMBER };
 
     ArrayList<ROLE> result = new ArrayList<>();
     for (int i = 0; i < howManyPlayers; i++) {
@@ -60,6 +82,16 @@ public class Narrator implements Runnable {
 
   public void introduceMafiaToTheirTeammate() {
     ArrayList<Player> mafias = this.getMafias();
+    ArrayList<String> messages = this.createIntroductionMessages(mafias);
+    this.broadcast(String.join("\n", messages), mafias);
+  }
+
+  private void broadcast(String message, ArrayList<Player> players) {
+    for (Player p : players)
+      p.sendMessage(message);
+  }
+
+  private ArrayList<String> createIntroductionMessages(ArrayList<Player> mafias) {
     ArrayList<String> messages = new ArrayList<>();
     for (Player p : mafias) {
       if (p.getRole() == ROLE.GOD_FATHER)
@@ -70,13 +102,10 @@ public class Narrator implements Runnable {
       else
         messages.add("Mafia-Member: " + p.getUsername());
     }
-    for (Player p : mafias) {
-      p.sendMessage(String.join("\n", messages));
-    }
+    return messages;
   }
 
   public Player fetchPlayer(ROLE role) {
-
     Player result = null;
     for (Player p : this.server.getReadyPlayers()) {
       if (p.getRole() == role)
@@ -125,7 +154,7 @@ public class Narrator implements Runnable {
     }
   }
 
-  public void beginDayNightCycle() {
+  public void beginDayNightCycle(int beginDayNumber) {
     while (true) {
       if (this.didMafiaWin()) {
         this.announceMafiaWinner();
@@ -140,27 +169,33 @@ public class Narrator implements Runnable {
         return;
       }
 
-      if (this.gameData.getDayTime() == DAYTIME.DAY)
+      if (this.gameData.isDay())
         this.runDayCycle();
       else
         this.runNightCycle();
 
+      // this.gameData.setIsVotingGotCanceled(false);// reseting mayour decision to
+      // false
+      this.sendPlayerStateToClient();
     }
   }
 
   private void runNightCycle() {
-    new UpdateTimer(20, this.server.getReadyPlayers()).run();
+    // this.clearNews();
+    this.setTimerFor(20);
     this.updateDayTime(DAYTIME.DAY);
+    this.sendNews();
     this.dayCount++;
   }
 
   private void runDayCycle() {
+    // this.clearNews();
     this.enableChat();
-    UpdateTimer timer = new UpdateTimer(2 * 60, this.server.getReadyPlayers());
-    timer.run();
+    this.setTimerFor(10);
     this.sleep(0, 1, 0);
     this.saveAndClearChatMessages();
-    this.votingCycle();
+    this.startVotingSession();
+    this.sendNews();
   }
 
   private void saveAndClearChatMessages() {
@@ -170,25 +205,84 @@ public class Narrator implements Runnable {
     }
   }
 
-  private void votingCycle() {
+  private void startVotingSession() {
     this.disableChat();
-    new UpdateTimer(30, this.server.getReadyPlayers()).run();
+    this.enableOnlyVotingChat(this.server.getAlivePlayersUsernames());
+    this.setTimerFor(20);
     this.sleep(0, 1, 0);
+    this.disableVoting();
+    this.enableMayorDecisioning();
     this.updateDayTime(DAYTIME.NIGHT);
   }
-  // TODO: fix the bug : the last person who types !ready cant type in chat!
+
+  private void setTimerFor(int seconds) {
+    new UpdateTimer(seconds, this.server.getReadyPlayers()).run();
+  }
+
+  private void enableMayorDecisioning() {
+    if (this.isThereMayorInGame()) {
+      this.broadcast(SocketDataSender.START_MAYOR_VOTING_STATE, this.server.getReadyPlayers());
+      this.setTimerFor(10);
+    }
+
+    if (this.isVotingGotCanceledByMayor()) {
+      this.gameData.addNews("Voting got canceled by Mayor");
+    } else {
+      Player mostVotedPlayer = this.server.getMostVotedPlayer();
+      if (mostVotedPlayer != null) {
+        mostVotedPlayer.kill();
+        this.gameData.addNews("<" + mostVotedPlayer.getUsername() + "> voted out!");
+      } else
+        this.gameData.addNews("WHAT HAPPEND");
+    }
+
+    this.broadcast(SocketDataSender.END_MAYOR_VOTING_STATE, this.server.getReadyPlayers());
+  }
+
+  private boolean isVotingGotCanceledByMayor() {
+    return this.gameData.getIsVotingGotCanceled();
+  }
+
+  private void disableVoting() {
+    for (Player p : this.server.getReadyPlayers()) {
+      p.sendMessage(SocketDataSender.DISABLE_VOTING);
+    }
+  }
+
+  private void sendNews() {
+    if (!this.gameData.isThereAnyNews())
+      return;
+    ArrayList<String> news = this.gameData.getNews();
+    this.broadcast(this.dataSender.createNews(news), this.server.getReadyPlayers());
+    // this.gameData.clearNews();
+    this.clearNews();
+  }
+
+  private void enableOnlyVotingChat(ArrayList<String> choices) {
+    for (Player p : this.server.getReadyPlayers()) {
+      p.sendMessage(SocketDataSender.ENABLE_VOTING);
+      p.sendMessage(this.dataSender.createVotingTable(choices));
+    }
+
+  }
 
   private void enableChat() {
+
     for (Player p : this.server.getReadyPlayers()) {
-      p.sendMessage(SocketDataSender.ENABLE_CHAT);
+      p.setCanChat(true);
+      // p.sendMessage(SocketDataSender.ENABLE_CHAT);
     }
+
+    this.sendPlayerStateToClient();
   }
 
   private void disableChat() {
     // System.out.println("disabling chat for all players");
     for (Player p : this.server.getReadyPlayers()) {
-      p.sendMessage(SocketDataSender.DISABLE_CHAT);
+      p.setCanChat(false);
+      // p.sendMessage(SocketDataSender.DISABLE_CHAT);
     }
+    this.sendPlayerStateToClient();
   }
 
   public boolean didMafiaWin() {
@@ -211,7 +305,7 @@ public class Narrator implements Runnable {
 
   @Override
   public void run() {
-    this.server.setIsGameStarted(true);
+    // this.server.setIsGameStarted(true);
     // 1 - give each player a role
     this.initPlayers();
     // 2 - init game data
@@ -221,8 +315,9 @@ public class Narrator implements Runnable {
     this.introduceDRToMayor();
 
     this.sleep(0, 3, 0);
-    this.gameData.updateDayTime(DAYTIME.DAY);
-    this.beginDayNightCycle();
+    this.updateDayTime(DAYTIME.DAY);
+    // this.gameData.updateDayTime(DAYTIME.DAY);
+    this.beginDayNightCycle(this.dayCount);
     // 4 - normal night > 1- awakes 1-mafia 2- dr.lakter 3- dr.city 4- detective
     // 5-killer 6-ravanshenas 7-diehard
 
@@ -234,6 +329,11 @@ public class Narrator implements Runnable {
 
     // 7 - end game condition if #mafia >= #citizens => mafia won the game if #mafia
     // = 0 => citizens won the game
+  }
+
+  private void clearNews() {
+    this.gameData.clearNews();
+    // this.broadcast(SocketDataSender.CLEAR_NEWS, this.server.getReadyPlayers());
   }
 
   private void sleep(int min, int sec, int ms) {
