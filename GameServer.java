@@ -3,7 +3,11 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 class GameServer {
@@ -14,6 +18,7 @@ class GameServer {
   private SocketDataSender dataSender;
   private volatile ArrayList<Player> readyPlayers;
   private Narrator ravi;
+  private SocketDataReciever dataReciever;
   private static final int MIN_NUMBER_OF_PLAYERS = 3;
   // public int a = 0;
 
@@ -25,6 +30,7 @@ class GameServer {
     this.dataSender = new SocketDataSender();
     this.readyPlayers = new ArrayList<>();
     this.ravi = new Narrator(this, GameData.getInstance());
+    this.dataReciever = new SocketDataReciever();
   }
 
   public boolean getIsGameStarted() {
@@ -33,6 +39,23 @@ class GameServer {
 
   public ArrayList<Player> getReadyPlayers() {
     return this.readyPlayers;
+  }
+
+  public ArrayList<String> getReadyPlayersUsernames() {
+    ArrayList<String> result = new ArrayList<>();
+    for (Player p : this.readyPlayers) {
+      result.add(p.getUsername());
+    }
+    return result;
+  }
+
+  public ArrayList<String> getAlivePlayersUsernames() {
+    ArrayList<String> result = new ArrayList<>();
+    for (Player p : this.readyPlayers) {
+      if (p.getIsAlive())
+        result.add(p.getUsername());
+    }
+    return result;
   }
 
   public UserThread getUser(String username) {
@@ -45,6 +68,70 @@ class GameServer {
     return null;
   }
 
+  public Player getPlayerByUsername(String username) {
+    for (Player p : this.readyPlayers) {
+      if (p.getUsername().equals(username))
+        return p;
+    }
+    return null;
+  }
+
+  public Player getMostVotedPlayer() {
+    Collection<String> votes = this.dataReciever.getVotes().values();
+    String[] voteList = votes.toArray(new String[votes.size()]);
+
+    String vote = this.findMostFrequetString(voteList);
+    if (vote.equals("{TIED}"))
+      return null;
+    return this.getPlayerByUsername(vote);
+  }
+
+  private String findMostFrequetString(String[] list) {
+    HashMap<String, Integer> frequencyMap = this.createFrequencyMap(list);
+    frequencyMap.remove("< ! >");
+    ArrayList<Integer> values = new ArrayList<>();
+    values.addAll(frequencyMap.values());
+    if (values.size() == 0 || isVotingTied(values)) {
+      return "{TIED}";
+    }
+    return this.getKeyOfBiggestValueInMap(frequencyMap);
+  }
+
+  private boolean isVotingTied(ArrayList<Integer> values) {
+    int halfOfAlivePlayers = (int) Math.ceil(this.getAlivePlayersUsernames().size() / 2f);
+    Collections.sort(values);
+    int biggestVoteNumber = values.get(values.size() - 1);
+    if (biggestVoteNumber >= halfOfAlivePlayers)
+      return false;
+
+    return values.get(0) == values.get(values.size() - 1);
+  }
+
+  private HashMap<String, Integer> createFrequencyMap(String[] list) {
+    HashMap<String, Integer> result = new HashMap<>();
+    for (String s : list) {
+      Integer value = result.get(s);
+      int nextValue = value == null ? 1 : value + 1;
+      result.put(s, nextValue);
+    }
+    return result;
+  }
+
+  private String getKeyOfBiggestValueInMap(HashMap<String, Integer> map) {
+    String biggestKey = "";
+    int biggestValue = Integer.MIN_VALUE;
+
+    for (Map.Entry<String, Integer> el : map.entrySet()) {
+      String key = el.getKey();
+      int value = el.getValue();
+      if (value > biggestValue) {
+        biggestValue = value;
+        biggestKey = key;
+      }
+    }
+    return biggestKey;
+  }
+
   public void execute() {
     try (ServerSocket serverSocket = new ServerSocket(this.port)) {
       System.out.println("Chat Server Listening On [PORT]: " + this.port);
@@ -52,7 +139,7 @@ class GameServer {
         Socket socket = serverSocket.accept();
         System.out.println("New User Connected!");
 
-        UserThread newUser = new UserThread(socket, this);
+        UserThread newUser = new UserThread(socket, this, this.dataReciever);
 
         this.userThreads.add(newUser);
         newUser.start();
@@ -62,6 +149,14 @@ class GameServer {
       System.out.println("Server Error: " + ex.getMessage());
       ex.printStackTrace();
     }
+  }
+
+  public Player getPlayerByRole(ROLE role) {
+    for (Player p : this.readyPlayers) {
+      if (p.getRole() == role)
+        return p;
+    }
+    return null;
   }
 
   public Set<UserThread> getUserThreads() {
