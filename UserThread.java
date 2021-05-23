@@ -21,7 +21,6 @@ public class UserThread extends Thread {
     this.gameServer = gameServer;
     this.username = "";
     this.dataSender = new SocketDataSender();
-    // this.dataReciever = new SocketDataReciever();
     this.dataReciever = dataReciever;
 
   }
@@ -55,8 +54,6 @@ public class UserThread extends Thread {
 
       String clientMessage = "";
       do {
-
-        // System.out.println("FROM user " + username + " message : " + clientMessage);
 
         if (!this.gameServer.getIsGameStarted() && this.gameServer.canBeginTheGame()) {
           this.gameServer.setIsGameStarted(true);// this is for not entering this if statement and making another
@@ -95,7 +92,6 @@ public class UserThread extends Thread {
           continue;
         }
 
-        // if(this.da)
         if (!this.gameServer.getIsGameStarted() && clientMessage.equals("!ready")) {
           this.gameServer.registerForGame(username, this);
           this.sleep(10);
