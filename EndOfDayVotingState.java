@@ -1,4 +1,4 @@
-public class EndOfDayVotingState extends GameState {
+public class EndOfDayVotingState extends ServerState {
 
   public EndOfDayVotingState(Narrator narrator, GameServer server) {
     super(narrator, server);

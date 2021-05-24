@@ -1,4 +1,4 @@
-public class MafiaWinnerState extends GameState {
+public class MafiaWinnerState extends ServerState {
   private SocketDataSender dataSender;
 
   public MafiaWinnerState(Narrator narrator, GameServer server, SocketDataSender dataSender) {

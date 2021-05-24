@@ -1,4 +1,4 @@
-public class CitizenWinnerState extends GameState {
+public class CitizenWinnerState extends ServerState {
 
   private SocketDataSender dataSender;
 

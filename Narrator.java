@@ -5,9 +5,9 @@ public class Narrator implements Runnable {
   private GameServer server;
   private GameData gameData;
   private SocketDataSender dataSender;
-  private GameState currentState;
+  private ServerState currentState;
 
-  private HashMap<STATES, GameState> states;
+  private HashMap<STATES, ServerState> states;
 
   public Narrator(GameServer server, GameData gameData) {
     this.server = server;
@@ -19,7 +19,7 @@ public class Narrator implements Runnable {
   }
 
   private void initStates() {
-    GameState initPlayersState = new InitPlayersState(this, this.server, this.gameData);
+    ServerState initPlayersState = new InitPlayersState(this, this.server, this.gameData);
 
     this.states.put(STATES.INIT_PLAYERS, initPlayersState);
     this.states.put(STATES.INTRODUCE_MAFIAS, new IntroduceMafiaToTheirTeammateState(this, this.server));
@@ -39,12 +39,6 @@ public class Narrator implements Runnable {
     this.currentState = initPlayersState;
   }
 
-  public void sendPlayerStateToClient() {
-    for (Player p : this.server.getReadyPlayers()) {
-      p.sendMessage(this.dataSender.createPlayerState(p));
-    }
-  }
-
   public void changeState(STATES state) {
     this.currentState = this.states.get(state);
   }
@@ -62,10 +56,6 @@ public class Narrator implements Runnable {
       break;
     }
     return result;
-  }
-
-  public void setTimerFor(int seconds) {
-    new UpdateTimer(seconds, this.server.getReadyPlayers()).run();
   }
 
   @Override

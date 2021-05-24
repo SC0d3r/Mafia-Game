@@ -1,4 +1,4 @@
-public class IntroduceDrToMayorState extends GameState {
+public class IntroduceDrToMayorState extends ServerState {
 
   private SocketDataSender dataSender;
 

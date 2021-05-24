@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class IntroduceMafiaToTheirTeammateState extends GameState {
+public class IntroduceMafiaToTheirTeammateState extends ServerState {
 
   public IntroduceMafiaToTheirTeammateState(Narrator narrator, GameServer server) {
     super(narrator, server);

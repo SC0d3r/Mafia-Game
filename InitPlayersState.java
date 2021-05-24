@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class InitPlayersState extends GameState {
+public class InitPlayersState extends ServerState {
   private SocketDataSender dataSender;
   private GameData gameData;
 
@@ -14,10 +14,16 @@ public class InitPlayersState extends GameState {
   @Override
   public boolean run() {
     this.setPlayersRoles();
-    this.sendPlayerStateToClient();
+    this.gameServer.sendPlayerStateToClients();
+    this.sendGameStateToClients();
     this.createPlayersHeaderInfoBar();
     this.narrator.changeState(STATES.INTRODUCE_MAFIAS);
     return false;
+  }
+
+  private void sendGameStateToClients() {
+    this.gameServer.getGameState().setAlivePlayerUsernames(this.gameServer.getAlivePlayersUsernames());
+    this.gameServer.sendGameStateToClients();
   }
 
   private void createPlayersHeaderInfoBar() {
@@ -36,12 +42,6 @@ public class InitPlayersState extends GameState {
     }
   }
 
-  private void sendPlayerStateToClient() {
-    for (Player p : this.gameServer.getReadyPlayers()) {
-      p.sendMessage(this.dataSender.createPlayerState(p));
-    }
-  }
-
   private void setPlayersRoles() {
     ArrayList<ROLE> roles = this.createRoles();
     int i = 0;
@@ -53,7 +53,7 @@ public class InitPlayersState extends GameState {
 
   private ArrayList<ROLE> createRoles() {
     int howManyPlayers = this.gameServer.getReadyPlayers().size();
-    ROLE[] allRoles = { ROLE.GOD_FATHER, ROLE.MAYOR, ROLE.DR_CITY, ROLE.DETECTIVE, ROLE.PROFESSIONAL, ROLE.PSYCHOLOGIST,
+    ROLE[] allRoles = { ROLE.PSYCHOLOGIST, ROLE.GOD_FATHER, ROLE.DR_CITY, ROLE.DETECTIVE, ROLE.PROFESSIONAL, ROLE.MAYOR,
         ROLE.DR_LACTER, ROLE.DIE_HARD, ROLE.CITIZEN, ROLE.MAFIA_MEMBER };
 
     ArrayList<ROLE> result = new ArrayList<>();

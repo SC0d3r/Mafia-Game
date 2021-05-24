@@ -1,4 +1,4 @@
-public class EnableChatState extends GameState {
+public class EnableChatState extends ServerState {
 
   public EnableChatState(Narrator narrator, GameServer server) {
     super(narrator, server);
@@ -9,10 +9,8 @@ public class EnableChatState extends GameState {
     for (Player p : this.gameServer.getReadyPlayers()) {
       p.setCanChat(true);
     }
-    this.narrator.sendPlayerStateToClient();
-    this.narrator.setTimerFor(20);
-    // UTIL.sleepMSM(0, 10, 0);
-
+    this.gameServer.sendPlayerStateToClients();
+    UTIL.setTimerFor(10, this.gameServer.getReadyPlayers());
     this.saveAndClearChatMessages();
     this.narrator.changeState(STATES.END_OF_DAY_VOTING);
     return false;

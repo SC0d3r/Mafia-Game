@@ -1,4 +1,4 @@
-public class DisableChatState extends GameState {
+public class DisableChatState extends ServerState {
 
   public DisableChatState(Narrator narrator, GameServer server) {
     super(narrator, server);
@@ -8,8 +8,9 @@ public class DisableChatState extends GameState {
   public boolean run() {
     for (Player p : this.gameServer.getReadyPlayers()) {
       p.setCanChat(false);
+      p.setIsSilenced(false);
     }
-    this.narrator.sendPlayerStateToClient();
+    this.gameServer.sendPlayerStateToClients();
     this.narrator.changeState(STATES.ONLY_VOTING_CHAT);
     return false;
   }

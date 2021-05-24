@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class WinLoseCheckState extends GameState {
+public class WinLoseCheckState extends ServerState {
 
   public WinLoseCheckState(Narrator narrator, GameServer server) {
     super(narrator, server);

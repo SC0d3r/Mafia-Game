@@ -1,33 +1,26 @@
 import java.util.ArrayList;
 
-public class OnlyVotingChatState extends GameState {
-
-  private SocketDataSender dataSender;
+public class OnlyVotingChatState extends ServerState {
 
   public OnlyVotingChatState(Narrator narrator, GameServer server, SocketDataSender dataSender) {
     super(narrator, server);
-    this.dataSender = dataSender;
   }
 
   @Override
   public boolean run() {
     ArrayList<String> choices = this.gameServer.getAlivePlayersUsernames();
-    for (Player p : this.gameServer.getReadyPlayers()) {
-      p.sendMessage(SocketDataSender.ENABLE_VOTING);
-      p.sendMessage(this.dataSender.createVotingTable(choices));
-    }
+    this.gameServer.getGameState().setIsVotingEnabled(true);
+    this.gameServer.getGameState().initVotingChoices(choices);
+    this.gameServer.sendGameStateToClients();
 
-    this.narrator.setTimerFor(20);
+    UTIL.setTimerFor(10, this.gameServer.getReadyPlayers());
 
-    this.disableVoting();
+    this.gameServer.getGameState().setIsVotingEnabled(false);
+    this.gameServer.sendGameStateToClients();
 
     this.narrator.changeState(STATES.MAYOR_DECISIONING);
 
     return false;
-  }
-
-  private void disableVoting() {
-    this.narrator.broadcast(SocketDataSender.DISABLE_VOTING, this.gameServer.getReadyPlayers());
   }
 
 }
