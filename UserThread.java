@@ -71,16 +71,13 @@ public class UserThread extends Thread {
         }
         clientMessage = reader.readLine();
         if (this.dataReciever.isVotingMapForServer(clientMessage)) {
-          // creating the voting map
           synchronized (this) {
-            // updates the votes hashmap in dataReciever
-            this.dataReciever.addVotingMapServerSide(clientMessage);
+            String voter = this.dataReciever.extractServerSideVoter(clientMessage);
+            String votee = this.dataReciever.extractServerSideVotee(clientMessage);
+            this.gameServer.getGameState().updateVote(voter, votee);
           }
 
-          for (Player p : this.gameServer.getReadyPlayers()) {
-            // System.out.println(this.dataSender.createVoteMapClientSide(clientMessage));
-            p.sendMessage(this.dataSender.createVoteMapClientSide(this.dataReciever.getVotes()));
-          }
+          this.gameServer.sendGameStateToClients();
           continue;
         }
 
@@ -89,6 +86,14 @@ public class UserThread extends Thread {
           // this.gam
           GameData gd = GameData.getInstance();
           gd.setIsVotingGotCanceled(vote);
+          continue;
+        }
+
+        if (this.dataReciever.isPsychologistRequest(clientMessage)) {
+          String toBeSilencedUsername = this.dataReciever.extractPshychologistRequest(clientMessage);
+          Player toBeSilenced = this.gameServer.getPlayerByUsername(toBeSilencedUsername);
+          toBeSilenced.setIsSilenced(true);
+          this.gameServer.sendPlayerStateToClients();
           continue;
         }
 
