@@ -1,7 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 public class SocketDataSender {
   public static final String HEADER_INFO_BAR = "::INFO";
@@ -27,6 +24,10 @@ public class SocketDataSender {
   public static final String END_MAYOR_VOTING_STATE = "::END_MAYOR_VOTING_STATE";
   public static final String SEND_NEWS = "::SEND_NEWS";
   public static final String CLEAR_NEWS = "::CLEAR_NEWS";
+  public static final String START_PSYCHOLOGIST_TURN = "::START_PSYCHOLOGIST_TURN";
+  public static final String END_PSYCHOLOGIST_TURN = "::END_PSYCHOLOGIST_TURN";
+  public static final String PSYCHOLOGIST_REQUEST = "::PSYCHOLOGIST_REQUEST";
+  public static final String SEND_GAME_STATE = "::SEND_GAME_STATE";
 
   public SocketDataSender() {
   }
@@ -34,6 +35,15 @@ public class SocketDataSender {
   public String createPlayerState(Player p) {
     String data = p.serialize();
     return SEND_PLAYER_STATE + SEPERATOR + data;
+  }
+
+  public String createGameState(GameState gameState) {
+    String data = gameState.serialize();
+    return SEND_GAME_STATE + SEPERATOR + data;
+  }
+
+  public String createPsychologistRequest(String toBeSilencedUsername) {
+    return PSYCHOLOGIST_REQUEST + SEPERATOR + toBeSilencedUsername;
   }
 
   public String createNews(ArrayList<String> news) {
@@ -48,38 +58,6 @@ public class SocketDataSender {
     return MAYOR_VOTES + SEPERATOR + yesOrNo;
   }
 
-  public String createVotingTable(ArrayList<String> choices) {
-    return VOTING_TABLE + SEPERATOR + String.join(",", choices);
-  }
-
-  public String createVoteFor(String voterUsername, String voteeUsername) {
-    return VOTE_FOR_USER + SEPERATOR + voterUsername + SEPERATOR + voteeUsername;
-  }
-
-  public String createVoteMapString(HashMap<String, String> votes) {
-    ArrayList<String> result = new ArrayList<>();
-    for (Map.Entry<String, String> el : votes.entrySet()) {
-      result.add(el.getKey() + ":" + el.getValue());
-    }
-    return String.join(",", result);
-  }
-
-  public String createVoteMapClientSide(HashMap<String, String> votes) {
-    return VOTING_MAP_CLIENT_SIDE + SEPERATOR + this.createVoteMapString(votes);
-  }
-
-  public HashMap<String, String> turnVoteMapStringIntoHashMap(String hashString) {
-    HashMap<String, String> result = new HashMap<>();
-    String[] keyValuePairs = hashString.split(",");
-    for (String keyValue : keyValuePairs) {
-      String key = keyValue.split(":")[0];
-      String value = keyValue.split(":")[1];
-
-      result.put(key, value);
-    }
-    return result;
-  }
-
   public String createChatMessage(String username, String message) {
     return CHAT_MESSAGE + SEPERATOR + username + SEPERATOR + message;
   }
@@ -92,8 +70,8 @@ public class SocketDataSender {
     return REMOVE_HEADER_INFO + SEPERATOR + infoName;
   }
 
-  public String createVotingMapForServer(String voter, String voteFor, HashMap<String, String> votes) {
-    return VOTING_MAP_SERVER_SIDE + SEPERATOR + voter + SEPERATOR + voteFor + SEPERATOR + createVoteMapString(votes);
+  public String createVotingMapForServer(String voter, String voteFor) {
+    return VOTING_MAP_SERVER_SIDE + SEPERATOR + voter + SEPERATOR + voteFor;
   }
 
 }
