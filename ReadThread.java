@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class ReadThread extends Thread {
 
@@ -48,20 +49,38 @@ public class ReadThread extends Thread {
     }
   }
 
+  private void printSeperator() {
+    System.out.println("\n-------------------------------------------------------------");
+  }
+
   private void printPromptText() {
-    if (!this.client.isAlive()) {
-      System.out.println("\n-------------------------------------------------------------");
-      System.out.print("[*] You are dead.");
+    if (!this.client.getPlayer().getIsAlive()) {
+      this.printSeperator();
+      System.out.print("[X_X] You are dead.");
       return;
     }
 
-    if (this.socketData.getIsVotingInProgress()) {
-      System.out.println("\n-------------------------------------------------------------");
+    if (this.client.getPlayer().getIsSilenced()) {
+      this.printSeperator();
+      System.out.print("[o_O] you got silenced!");
+      return;
+    }
+
+    if (this.client.getGameState().getIsVotingEnabled()) {
+      this.printSeperator();
       System.out.print("Press Enter to start voting ...");
       return;
     }
 
-    if (this.client.getIsInMayorVotingState()) {
+    if (this.client.getGameState().getIsInPsychologistState() && this.client.getPlayer().getIsAlive()) {
+      if (!this.client.isRole(ROLE.PSYCHOLOGIST)) {
+        System.out.print("Psychologist is deciding ...");
+      } else
+        System.out.print("Press [Enter] to start typing ...");
+      return;
+    }
+
+    if (this.client.getGameState().getIsInMayorState()) {
       if (!this.client.isRole(ROLE.MAYOR))
         System.out.print("Mayor is deciding ...");
       else
@@ -69,7 +88,7 @@ public class ReadThread extends Thread {
       return;
     }
 
-    if (!this.client.getCanChat() && this.client.isAlive()) {
+    if (!this.client.getPlayer().getCanChat() && this.client.getPlayer().getIsAlive()) {
       System.out.print("<.. zzZZZzz ..>");
       return;
     }
@@ -86,8 +105,9 @@ public class ReadThread extends Thread {
     System.out.println(this.socketData.getNews());
     System.out.println(this.socketData.getChatMessages());
 
-    if (this.socketData.getIsVotingInProgress()) {
-      String votingTable = this.socketData.getVotingTable();
+    if (this.client.getGameState().getIsVotingEnabled()) {
+      HashMap<String, String> votes = this.client.getGameState().getVotes();
+      String votingTable = this.socketData.getVotingTable(votes);
       System.out.println(votingTable);
     }
 
@@ -99,8 +119,6 @@ public class ReadThread extends Thread {
   }
 
   private void addAndUpdateData(String response) {
-    this.socketData.addVotingTable(response);
-    this.socketData.updateVotingTable(response);
     this.socketData.addInfo(response);
     this.socketData.removeHeaderInfo(response);
 
@@ -113,13 +131,9 @@ public class ReadThread extends Thread {
   }
 
   private void executeCommand(String response) {
-    if (response.equals(SocketDataSender.DISABLE_VOTING)) {
-      this.socketData.disableVoting();
-      this.socketData.setIsVotingInProgress(false);
-    }
-
-    if (this.socketData.shouldEnableVoting()) {
-      this.socketData.setIsVotingInProgress(true);
+    if (this.socketData.isGameStateData(response)) {
+      GameState newGameState = this.socketData.extractGameState(response);
+      this.client.setGameState(newGameState);
     }
 
     if (this.socketData.isGameBeginCommand(response)) {
@@ -134,14 +148,5 @@ public class ReadThread extends Thread {
     if (this.socketData.isAddAndClearChatCommand(response)) {
       this.socketData.saveAndClearChatMessages();
     }
-
-    if (this.socketData.isStartMayorVotingState(response)) {
-      this.client.setIsInMayorVotingState(true);
-    }
-
-    if (this.socketData.isEndMayorVotingState(response)) {
-      this.client.setIsInMayorVotingState(false);
-    }
   }
-
 }
