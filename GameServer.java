@@ -247,6 +247,11 @@ class GameServer {
     this.readyPlayers.add(new Player(username, ROLE.CITIZEN, user));
   }
 
+  public boolean isMafia(String username) {
+    Player p = this.getPlayerByUsername(username);
+    return p.getRole() == ROLE.GOD_FATHER || p.getRole() == ROLE.DR_LACTER || p.getRole() == ROLE.MAFIA_MEMBER;
+  }
+
   public void unregisterFromGame(String username) {
     System.out.println("User [" + username + "] unregistered from game.");
 
