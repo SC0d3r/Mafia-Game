@@ -84,6 +84,19 @@ public class ReadThread extends Thread {
       return;
     }
 
+    if (this.client.getGameState().getIsInDetectiveState()) {
+      if (!this.client.isRole(ROLE.DETECTIVE)) {
+        System.out.print("Detective is deciding ...");
+      } else {
+        ArrayList<String> aliveUsernames = this.client.getGameState().getAlivePlayerUsernames();
+        aliveUsernames.remove(this.client.getUsername());
+        System.out.println("Suspects: " + String.join(", ", aliveUsernames));
+        this.printSeperator();
+        System.out.print("Press Enter to select your suspect ...");
+      }
+      return;
+    }
+
     if (this.client.getGameState().getIsInPsychologistState() && this.client.getPlayer().getIsAlive()) {
       if (!this.client.isRole(ROLE.PSYCHOLOGIST)) {
         System.out.print("Psychologist is deciding ...");

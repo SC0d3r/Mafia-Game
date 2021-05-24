@@ -29,6 +29,7 @@ public class SocketDataSender {
   public static final String PSYCHOLOGIST_REQUEST = "::PSYCHOLOGIST_REQUEST";
   public static final String SEND_GAME_STATE = "::SEND_GAME_STATE";
   public static final String PROFESSIONAL_TARGET = "::PROFESSIONAL_TARGET";
+  public static final String DETECTIVE_QUERY = "::DETECTIVE_QUERY";
 
   public SocketDataSender() {
   }
@@ -40,6 +41,10 @@ public class SocketDataSender {
 
   public String createProfessionalTarget(String username) {
     return PROFESSIONAL_TARGET + SEPERATOR + username;
+  }
+
+  public String createDetectiveQuery(String username) {
+    return DETECTIVE_QUERY + SEPERATOR + username;
   }
 
   public String createGameState(GameState gameState) {

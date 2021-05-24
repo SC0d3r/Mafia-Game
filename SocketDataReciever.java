@@ -41,6 +41,14 @@ public class SocketDataReciever {
     return response.split(SocketDataSender.SEPERATOR)[1];
   }
 
+  public boolean isDetectiveQuery(String response) {
+    return response.contains(SocketDataSender.DETECTIVE_QUERY);
+  }
+
+  public String extractDetectiveQuery(String response) {
+    return response.split(SocketDataSender.SEPERATOR)[1];
+  }
+
   public boolean isPsychologistRequest(String respose) {
     return respose.contains(SocketDataSender.PSYCHOLOGIST_REQUEST);
   }

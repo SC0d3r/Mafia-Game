@@ -7,6 +7,8 @@ public class GameState implements Serializable {
   private boolean isInMayorState;
   private boolean isInProfessionalState;
   private String professionalTargetUsername;
+  private boolean isInDetectiveState;
+  private String detectiveSuspicionTarget;
   private boolean isVotingEnabled;
   private ArrayList<String> alivePlayerUsernames;
   private volatile HashMap<String, String> votes;
@@ -14,7 +16,9 @@ public class GameState implements Serializable {
   public GameState() {
     this.isInPsychologistState = false;
     this.isInProfessionalState = false;
+    this.isInDetectiveState = false;
     this.professionalTargetUsername = "";
+    this.detectiveSuspicionTarget = "";
     this.isInMayorState = false;
     this.alivePlayerUsernames = new ArrayList<>();
     this.isVotingEnabled = false;
@@ -27,6 +31,22 @@ public class GameState implements Serializable {
 
   public String getProfessionalTarget() {
     return this.professionalTargetUsername;
+  }
+
+  public boolean getIsInDetectiveState() {
+    return this.isInDetectiveState;
+  }
+
+  public void setIsInDetectiveState(boolean status) {
+    this.isInDetectiveState = status;
+  }
+
+  public String getDetectiveSuspicionTarget() {
+    return this.detectiveSuspicionTarget;
+  }
+
+  public void setDetectiveSuspicionTarget(String username) {
+    this.detectiveSuspicionTarget = username;
   }
 
   public void setProfessionalTarget(String username) {

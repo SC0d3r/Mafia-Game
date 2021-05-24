@@ -101,6 +101,11 @@ public class UserThread extends Thread {
           this.gameServer.getGameState().setProfessionalTarget(toBeKilledUsername);
           continue;
         }
+        if (this.dataReciever.isDetectiveQuery(clientMessage)) {
+          String queryUsername = this.dataReciever.extractDetectiveQuery(clientMessage);
+          this.gameServer.getGameState().setDetectiveSuspicionTarget(queryUsername);
+          continue;
+        }
 
         if (!this.gameServer.getIsGameStarted() && clientMessage.equals("!ready")) {
           this.gameServer.registerForGame(username, this);

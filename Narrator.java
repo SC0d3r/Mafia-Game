@@ -36,6 +36,7 @@ public class Narrator implements Runnable {
     this.states.put(STATES.BEGIN_NIGHT, new BeginNightState(this, this.server, this.gameData, this.dataSender));
     this.states.put(STATES.PSYCHOLOGIST, new PsychologistState(this, this.server, this.dataSender));
     this.states.put(STATES.PROFESSIONAL, new ProfessionalState(this, this.server, this.gameData));
+    this.states.put(STATES.DETECTIVE, new DetectiveState(this, this.server, this.gameData));
 
     this.currentState = initPlayersState;
   }
