@@ -18,9 +18,9 @@ class GameServer {
   private SocketDataSender dataSender;
   private volatile ArrayList<Player> readyPlayers;
   private Narrator ravi;
+  private GameState gameState;
   private SocketDataReciever dataReciever;
   private static final int MIN_NUMBER_OF_PLAYERS = 3;
-  // public int a = 0;
 
   public GameServer(int port) {
     this.port = port;
@@ -29,14 +29,33 @@ class GameServer {
     this.isGameStarted = false;
     this.dataSender = new SocketDataSender();
     this.readyPlayers = new ArrayList<>();
+    this.gameState = new GameState();
     this.ravi = new Narrator(this, GameData.getInstance());
     this.dataReciever = new SocketDataReciever();
+  }
+
+  public GameState getGameState() {
+    return this.gameState;
   }
 
   public boolean getIsGameStarted() {
     return this.isGameStarted;
   }
 
+  public void sendGameStateToClients() {
+    String gameStateData = this.dataSender.createGameState(this.gameState);
+    for (Player p : this.readyPlayers) {
+      p.sendMessage(gameStateData);
+    }
+  }
+
+  public void sendPlayerStateToClients() {
+    for (Player p : this.getReadyPlayers()) {
+      p.sendMessage(this.dataSender.createPlayerState(p));
+    }
+  }
+
+  //
   public ArrayList<Player> getReadyPlayers() {
     return this.readyPlayers;
   }
@@ -76,8 +95,8 @@ class GameServer {
     return null;
   }
 
-  public Player getMostVotedPlayer() {
-    Collection<String> votes = this.dataReciever.getVotes().values();
+  public Player getMostVotedPlayer(HashMap<String, String> voteMap) {
+    Collection<String> votes = voteMap.values();
     String[] voteList = votes.toArray(new String[votes.size()]);
 
     String vote = this.findMostFrequetString(voteList);
@@ -224,7 +243,7 @@ class GameServer {
         return;
     }
 
-    System.out.println("User [" + username + "] is ready for the game.");
+    System.out.println("User [" + username + "] is realy ***** ready for the game.");
     this.readyPlayers.add(new Player(username, ROLE.CITIZEN, user));
   }
 
@@ -271,15 +290,6 @@ class GameServer {
       user.sendMessage(message);
     }
   }
-
-  // public void broadcast(String message, String username) {
-  // for (UserThread user : this.userThreads) {
-  // if (user.hasUsername(username)) {
-  // continue;
-  // }
-  // user.sendMessage(message);
-  // }
-  // }
 
   public boolean addUserName(String username) {
     if (username.equals("null"))// this is for if user quits before typing his username
