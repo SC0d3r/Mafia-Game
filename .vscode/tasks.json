@@ -1,0 +1,38 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "process",
+			"label": "build server",
+			"windows": {
+				"command": "javac",
+				"args": [
+					"-cp",
+					".;gson-2.8.6.jar",
+					"GameServer.java"
+				]
+			},
+			"presentation": {
+				"reveal": "always",
+				"panel": "new"
+			},
+		},
+		{
+			"type": "process",
+			"label": "build client",
+			"windows": {
+				"command": "javac",
+				"args": [
+					"-cp",
+					".;gson-2.8.6.jar",
+					"GameClient.java"
+				]
+			},
+			"presentation": {
+				"reveal": "always",
+				"panel": "new"
+			},
+			"dependsOn" : ["build server"]
+		}
+	]
+}
