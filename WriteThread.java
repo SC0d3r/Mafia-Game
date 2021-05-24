@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class WriteThread extends Thread {
   private PrintWriter wirter;
@@ -78,54 +79,83 @@ public class WriteThread extends Thread {
     String text = "";
 
     if (!this.client.isAlive()) {
-      text = console.readLine().trim().toLowerCase();// for player who wants to type 'exit' to quit the game
-      return text;
+      return console.readLine().trim().toLowerCase();// for player who wants to type 'exit' to quit the game
     }
 
-    if (this.client.getIsInMayorVotingState()) {
+    if (this.client.getGameState().getIsInPsychologistState()) {
+      if (this.client.isRole(ROLE.PSYCHOLOGIST)) {
+        while (this.client.getGameState().getIsInPsychologistState() && this.client.isAlive()) {
+          text = console.readLine("[~] Which player you want to silence for the next turn ?").trim();
+          ArrayList<String> aliveUsernames = this.client.getGameState().getAlivePlayerUsernames();
+          aliveUsernames.remove(this.client.getUsername());
+          if (aliveUsernames.contains(text) || !this.client.getGameState().getIsInPsychologistState())
+            break;
+        }
+
+        if (this.client.getGameState().getIsInPsychologistState() && this.client.isAlive()) {// this is for if condition
+                                                                                             // changes while
+          // stuck in above loop
+          System.out.println("You chose: " + text);
+          this.wirter.println(this.dataSender.createPsychologistRequest(text));
+        }
+      }
+      if (this.client.getGameState().getIsInPsychologistState())// this is for if condition changes while
+        // stuck in above loop
+        return text;
+
+    }
+
+    if (this.client.getGameState().getIsInMayorState()) {
       if (this.client.isRole(ROLE.MAYOR)) {
         while (true) {
-          if (!this.client.getIsInMayorVotingState() && !this.client.isAlive())
+          if (!this.client.getGameState().getIsInMayorState() || !this.client.isAlive())
             break;
-          text = console.readLine("<> Do you want to cancel voting [Y/N]? ").trim();
+          text = console.readLine("[~] Do you want to cancel voting [Y/N]? ").trim();
           if (this.isAValidMayorVote(text))
             break;
         }
 
-        System.out.println("You voted: " + text);
-        if (this.client.getIsInMayorVotingState() && this.client.isAlive()) {// this is for if condition changes while
-                                                                             // stuck in above loop
+        if (this.client.getGameState().getIsInMayorState() && this.client.isAlive()) {// this is for if condition
+          // changes while
+          // stuck in above loop
           // System.out.println("HERE");
+          System.out.println("You voted: " + text);
           this.wirter.println(this.dataSender.createMayorVote(text));
         }
       }
-      if (this.client.getIsInMayorVotingState())// this is for if condition changes while stuck in above loop
+      if (this.client.getGameState().getIsInMayorState())// this is for if condition changes while stuck in above loop
         return text;
     }
 
-    if (this.socketData.getIsVotingInProgress()) {
-      while (true) {
-        if (!this.socketData.getIsVotingInProgress() || !this.client.isAlive())
-          break;
+    // if (this.socketData.getIsVotingInProgress()) {
+    if (this.client.getGameState().getIsVotingEnabled()) {
+      while (this.client.getGameState().getIsVotingEnabled() && this.client.getPlayer().getIsAlive()) {
         text = console.readLine("Vote: ").trim();
-        if (this.socketData.isValidVote(text))
+        if (this.client.getGameState().isAValidVote(text))
           break;
 
-        if (this.socketData.getIsVotingInProgress())
+        if (this.client.getGameState().getIsVotingEnabled())
           System.out.println("<   Not a valid Vote  : " + text + " >");
       }
-      if (this.socketData.getIsVotingInProgress() && this.client.isAlive()) {
-        this.wirter.println(this.dataSender.createVotingMapForServer(username, text, this.socketData.getVotes()));
-        return text;
+      if (this.client.getGameState().getIsVotingEnabled() && this.client.getPlayer().getIsAlive()) {
+        this.wirter.println(this.dataSender.createVotingMapForServer(username, text));
       }
+      if (this.client.getGameState().getIsVotingEnabled())
+        return text;
     }
 
-    if (this.client.getCanChat() && this.client.isAlive()) {
+    if (this.client.getPlayer().getCanChat() && !this.client.getPlayer().getIsSilenced()
+        && this.client.getPlayer().getIsAlive()) {
       text = console.readLine(username + ": ").trim();
       if (text.isBlank())
         return text;
-      if (this.client.getCanChat() && this.client.isAlive())// maybe state changed while stuck in readline function
+      // maybe state changed while stuck in readline function
+      if (this.client.getPlayer().getCanChat() && !this.client.getPlayer().getIsSilenced()
+          && this.client.getPlayer().getIsAlive()) {
         this.wirter.println(text);
+      }
+
+      return text;
     }
 
     return text;
