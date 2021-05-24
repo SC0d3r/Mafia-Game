@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ReadThread extends Thread {
@@ -72,6 +73,17 @@ public class ReadThread extends Thread {
       return;
     }
 
+    if (this.client.getGameState().getIsInProfessionalState()) {
+      if (!this.client.isRole(ROLE.PROFESSIONAL)) {
+        System.out.print("Professional is deciding ...");
+      } else {
+        this.printAvailableTargets();
+        this.printSeperator();
+        System.out.print("Press Enter to select your target ...");
+      }
+      return;
+    }
+
     if (this.client.getGameState().getIsInPsychologistState() && this.client.getPlayer().getIsAlive()) {
       if (!this.client.isRole(ROLE.PSYCHOLOGIST)) {
         System.out.print("Psychologist is deciding ...");
@@ -98,6 +110,12 @@ public class ReadThread extends Thread {
       System.out.print(this.client.getUsername() + ": ");
     } else
       System.out.print("Enter username: ");
+  }
+
+  private void printAvailableTargets() {
+    ArrayList<String> aliveUsernames = this.client.getGameState().getAlivePlayerUsernames();
+    aliveUsernames.remove(this.client.getUsername());
+    System.out.println("Available targets: " + String.join(", ", aliveUsernames));
   }
 
   private void draw(String response) {

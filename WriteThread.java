@@ -105,6 +105,29 @@ public class WriteThread extends Thread {
 
     }
 
+    if (this.client.getGameState().getIsInProfessionalState()) {
+      if (this.client.isRole(ROLE.PROFESSIONAL)) {
+        while (this.client.getGameState().getIsInProfessionalState() && this.client.getPlayer().getIsAlive()) {
+          text = console.readLine("[~] Whick target do you want to eliminate? ").trim();
+          ArrayList<String> aliveUsernames = this.client.getGameState().getAlivePlayerUsernames();
+          aliveUsernames.remove(this.client.getUsername());
+          if (aliveUsernames.contains(text) || !this.client.getGameState().getIsInProfessionalState())
+            break;
+        }
+
+        if (this.client.getGameState().getIsInProfessionalState() && this.client.getPlayer().getIsAlive()) {// this is
+                                                                                                            // for if
+                                                                                                            // condition
+          // changes while
+          // stuck in above loop
+          System.out.println("You chose: " + text);
+          this.wirter.println(this.dataSender.createProfessionalTarget(text));
+        }
+      }
+      if (this.client.getGameState().getIsInProfessionalState())
+        return text;
+    }
+
     if (this.client.getGameState().getIsInMayorState()) {
       if (this.client.isRole(ROLE.MAYOR)) {
         while (true) {

@@ -15,7 +15,7 @@ public class PsychologistState extends ServerState {
       this.gameServer.sendGameStateToClients();
       // UTIL.sleep(20);
     }
-    this.narrator.changeState(STATES.BEGIN_DAY);
+    this.narrator.changeState(STATES.PROFESSIONAL);
     return false;
   }
 

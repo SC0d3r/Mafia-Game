@@ -33,6 +33,14 @@ public class SocketDataReciever {
     return GameState.deserialize(data);
   }
 
+  public boolean isProfessionalTargetCommand(String response) {
+    return response.contains(SocketDataSender.PROFESSIONAL_TARGET);
+  }
+
+  public String extractProfessionalTarget(String response) {
+    return response.split(SocketDataSender.SEPERATOR)[1];
+  }
+
   public boolean isPsychologistRequest(String respose) {
     return respose.contains(SocketDataSender.PSYCHOLOGIST_REQUEST);
   }

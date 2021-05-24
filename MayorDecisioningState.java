@@ -27,8 +27,9 @@ public class MayorDecisioningState extends ServerState {
         mostVotedPlayer.kill();
         this.gameServer.getGameState().setAlivePlayerUsernames(this.gameServer.getAlivePlayersUsernames());
         this.gameData.addNews("<" + mostVotedPlayer.getUsername() + "> voted out!");
-      } else
-        this.gameData.addNews("Nothing happend!");
+      }
+      // else
+      // this.gameData.addNews("Nothing happend!");
     }
 
     if (this.isThereMayorInGame())

@@ -28,6 +28,7 @@ public class SocketDataSender {
   public static final String END_PSYCHOLOGIST_TURN = "::END_PSYCHOLOGIST_TURN";
   public static final String PSYCHOLOGIST_REQUEST = "::PSYCHOLOGIST_REQUEST";
   public static final String SEND_GAME_STATE = "::SEND_GAME_STATE";
+  public static final String PROFESSIONAL_TARGET = "::PROFESSIONAL_TARGET";
 
   public SocketDataSender() {
   }
@@ -35,6 +36,10 @@ public class SocketDataSender {
   public String createPlayerState(Player p) {
     String data = p.serialize();
     return SEND_PLAYER_STATE + SEPERATOR + data;
+  }
+
+  public String createProfessionalTarget(String username) {
+    return PROFESSIONAL_TARGET + SEPERATOR + username;
   }
 
   public String createGameState(GameState gameState) {

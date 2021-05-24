@@ -5,12 +5,16 @@ import java.util.HashMap;
 public class GameState implements Serializable {
   private boolean isInPsychologistState;
   private boolean isInMayorState;
+  private boolean isInProfessionalState;
+  private String professionalTargetUsername;
   private boolean isVotingEnabled;
   private ArrayList<String> alivePlayerUsernames;
   private volatile HashMap<String, String> votes;
 
   public GameState() {
     this.isInPsychologistState = false;
+    this.isInProfessionalState = false;
+    this.professionalTargetUsername = "";
     this.isInMayorState = false;
     this.alivePlayerUsernames = new ArrayList<>();
     this.isVotingEnabled = false;
@@ -19,6 +23,14 @@ public class GameState implements Serializable {
 
   public void clearVotes() {
     this.votes = new HashMap<>();
+  }
+
+  public String getProfessionalTarget() {
+    return this.professionalTargetUsername;
+  }
+
+  public void setProfessionalTarget(String username) {
+    this.professionalTargetUsername = username;
   }
 
   public void initVotingChoices(ArrayList<String> choices) {
@@ -62,6 +74,14 @@ public class GameState implements Serializable {
 
   public boolean getIsInPsychologistState() {
     return this.isInPsychologistState;
+  }
+
+  public boolean getIsInProfessionalState() {
+    return this.isInProfessionalState;
+  }
+
+  public void setIsInProfessionalState(boolean status) {
+    this.isInProfessionalState = status;
   }
 
   public void setIsInMayorState(Boolean state) {

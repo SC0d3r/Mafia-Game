@@ -96,6 +96,11 @@ public class UserThread extends Thread {
           this.gameServer.sendPlayerStateToClients();
           continue;
         }
+        if (this.dataReciever.isProfessionalTargetCommand(clientMessage)) {
+          String toBeKilledUsername = this.dataReciever.extractProfessionalTarget(clientMessage);
+          this.gameServer.getGameState().setProfessionalTarget(toBeKilledUsername);
+          continue;
+        }
 
         if (!this.gameServer.getIsGameStarted() && clientMessage.equals("!ready")) {
           this.gameServer.registerForGame(username, this);
