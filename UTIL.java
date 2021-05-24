@@ -1,4 +1,17 @@
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Base64;
+
+import com.google.gson.Gson;
+
 public class UTIL {
+  public static final Gson gson = new Gson();
+
   public static void sleep(int millis) {
     try {
       Thread.sleep(millis);
@@ -16,4 +29,16 @@ public class UTIL {
     sleep(total);
   }
 
+  /** Read the object from Base64 string. */
+  public static <T> T objectFromString(String s, Class<T> cls) {
+    return gson.fromJson(s, cls);
+  }
+
+  public static String objectToString(Serializable o) {
+    return gson.toJson(o);
+  }
+
+  public static void setTimerFor(int seconds, ArrayList<Player> players) {
+    new UpdateTimer(seconds, players).run();
+  }
 }
