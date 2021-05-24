@@ -1,16 +1,20 @@
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
   private String username;
   private ROLE role;
   private boolean isALive;
   private boolean canChat;
-  private UserThread user;
+  private transient UserThread user;
+  private boolean isSilenced;
 
   public Player(String username, ROLE role, UserThread user) {
     this.role = role;
     this.isALive = true;
-    this.canChat = false;
+    this.canChat = true;
     this.username = username;
     this.user = user;
+    this.isSilenced = false;
   }
 
   public void kill() {
@@ -18,25 +22,20 @@ public class Player {
     this.canChat = false;
   }
 
+  public boolean getIsSilenced() {
+    return this.isSilenced;
+  }
+
+  public void setIsSilenced(boolean status) {
+    this.isSilenced = status;
+  }
+
   public String serialize() {
-    // TODO: add isSilent field to player to be used when Psychologist silences a
-    // user
-    return this.role + SocketDataSender.SECONDARY_SEPERATOR + this.isALive + SocketDataSender.SECONDARY_SEPERATOR
-        + this.canChat + SocketDataSender.SECONDARY_SEPERATOR + this.username;
+    return UTIL.objectToString(this);
   }
 
   public static Player deserialize(String serializedData) {
-    String[] datas = serializedData.split(SocketDataSender.SECONDARY_SEPERATOR);
-
-    ROLE role = ROLE.valueOf(datas[0]);
-    boolean isAlive = Boolean.valueOf(datas[1]);
-    boolean canChat = Boolean.valueOf(datas[2]);
-    String username = datas[3];
-
-    Player p = new Player(username, role, null);
-    p.setIsAlive(isAlive);
-    p.setCanChat(canChat);
-    return p;
+    return UTIL.objectFromString(serializedData, Player.class);
   }
 
   public void setIsAlive(boolean isAlive) {
