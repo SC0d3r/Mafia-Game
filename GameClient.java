@@ -7,24 +7,29 @@ public class GameClient {
   private int port;
   private String username;
   private Player player;
-  private boolean isInMayorVotingState;
+  private GameState gameState;
 
   public GameClient(String hostname, int port) {
     this.port = port;
     this.hostname = hostname;
-    this.isInMayorVotingState = false;
+    this.gameState = new GameState();
+    this.player = new Player("Anonymouse", ROLE.CITIZEN, null);
+  }
+
+  public Player getPlayer() {
+    return this.player;
+  }
+
+  public void setGameState(GameState state) {
+    this.gameState = state;
+  }
+
+  public GameState getGameState() {
+    return this.gameState;
   }
 
   public void setPlayer(Player p) {
     this.player = p;
-  }
-
-  public void setIsInMayorVotingState(boolean state) {
-    this.isInMayorVotingState = state;
-  }
-
-  public boolean getIsInMayorVotingState() {
-    return this.isInMayorVotingState;
   }
 
   public boolean isRole(ROLE role) {
