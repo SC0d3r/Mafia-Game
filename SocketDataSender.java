@@ -34,6 +34,7 @@ public class SocketDataSender {
   public static final String DR_LACTER_CURES = "::DR_LACTER_CURES";
   public static final String MAFIA_CHAT_MESSAGE = "::MAFIA_CHAT_MESSAGE";
   public static final String GOD_FATHER_TARGET_USERNAME = "::GOD_FATHER_TARGET_USERNAME";
+  public static final String DR_CITY_CURES = "::DR_CITY_CURES";
 
   public SocketDataSender() {
   }
@@ -41,6 +42,10 @@ public class SocketDataSender {
   public String createPlayerState(Player p) {
     String data = p.serialize();
     return SEND_PLAYER_STATE + SEPERATOR + data;
+  }
+
+  public String createDrCityCuresMessage(String username) {
+    return DR_CITY_CURES + SEPERATOR + username;
   }
 
   public String createGodFatherTarget(String username) {

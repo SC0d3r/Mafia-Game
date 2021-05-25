@@ -206,6 +206,14 @@ public class SocketDataReciever {
     return response.split(SocketDataSender.SEPERATOR)[1];
   }
 
+  public boolean isDrCityCuresMessage(String response) {
+    return response.contains(SocketDataSender.DR_CITY_CURES);
+  }
+
+  public String extractDrCityCuresUsername(String response) {
+    return response.split(SocketDataSender.SEPERATOR)[1];
+  }
+
   public boolean isVotingMapForServer(String response) {
     return response.contains(SocketDataSender.VOTING_MAP_SERVER_SIDE);
   }

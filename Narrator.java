@@ -41,6 +41,7 @@ public class Narrator implements Runnable {
     this.states.put(STATES.DR_LACTER, new DRLacterState(this, this.server));
     this.states.put(STATES.MAFIA_GATHERING, new MafiaGatheringState(this, this.server));
     this.states.put(STATES.GOD_FATHER, new GodFatherState(this, this.server));
+    this.states.put(STATES.DR_CITY, new DrCityState(this, this.server, this.gameData));
 
     this.currentState = initPlayersState;
   }

@@ -135,6 +135,12 @@ public class UserThread extends Thread {
           continue;
         }
 
+        if (this.dataReciever.isDrCityCuresMessage(clientMessage)) {
+          String cureTargetUsername = this.dataReciever.extractDrCityCuresUsername(clientMessage);
+          this.gameServer.getGameState().setDrCitySaveTarget(cureTargetUsername);
+          continue;
+        }
+
         if (!this.gameServer.getIsGameStarted() && clientMessage.equals("!ready")) {
           this.gameServer.registerForGame(username, this);
           this.sleep(10);

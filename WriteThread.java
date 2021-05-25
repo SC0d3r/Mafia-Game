@@ -159,7 +159,7 @@ public class WriteThread extends Thread {
     if (this.client.getGameState().getIsInDrLacterState()) {
       if (this.client.isRole(ROLE.DR_LACTER)) {
         while (this.client.getGameState().getIsInDrLacterState() && this.client.getPlayer().getIsAlive()) {
-          text = console.readLine("[~] Which player do you want to save? ").trim();
+          text = console.readLine("[+] Who do you want to save? ").trim();
           ArrayList<String> aliveMafiaUsernames = this.client.getGameState().getAliveMafiaUsernames();
           if (this.client.getGameState().getIsDrLacterSavedHimselfAllready()) {
             aliveMafiaUsernames.remove(this.client.getUsername());
@@ -173,6 +173,26 @@ public class WriteThread extends Thread {
         }
       }
       if (this.client.getGameState().getIsInDrLacterState())
+        return text;
+    }
+
+    if (this.client.getGameState().getIsInDrCityState()) {
+      if (this.client.isRole(ROLE.DR_CITY)) {
+        while (this.client.getGameState().getIsInDrCityState() && this.client.getPlayer().getIsAlive()) {
+          text = console.readLine("[+] Who do you want to save? ").trim();
+          ArrayList<String> aliveCitizen = this.client.getGameState().getAliveCitizenUsernames();
+          if (this.client.getGameState().getIsDrCitySavedHimselfAllready()) {
+            aliveCitizen.remove(this.client.getUsername());
+          }
+          if (aliveCitizen.contains(text) || !this.client.getGameState().getIsInDrCityState())
+            break;
+        }
+        if (this.client.getGameState().getIsInDrCityState() && this.client.getPlayer().getIsAlive()) {
+          System.out.println("You chose: " + text);
+          this.wirter.println(this.dataSender.createDrCityCuresMessage(text));
+        }
+      }
+      if (this.client.getGameState().getIsInDrCityState())
         return text;
     }
 

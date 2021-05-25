@@ -18,6 +18,9 @@ public class GameState implements Serializable {
   private boolean isInGodFatherState;
   private String godFatherTargetUsername;
   private String drLacterCuresUsername;
+  private boolean isInDrCityState;
+  private String drCitySaveTarget;
+  private boolean isDrCitySavedHimselfAllready;
   private ArrayList<String> alivePlayerUsernames;
   private ArrayList<String> aliveMafiaUsernames;
   private ArrayList<String> aliveCitizenUsernames;
@@ -30,11 +33,14 @@ public class GameState implements Serializable {
     this.isInDrLacterState = false;
     this.isInDieHardState = false;
     this.isInMafiaGatheringState = false;
+    this.isInDrCityState = false;
+    this.drCitySaveTarget = "";
     this.drLacterCuresUsername = "";
     this.godFatherTargetUsername = "";
     this.isDrLacterSavedHimselfAllready = false;
     this.isDieHardRequestedInvestigation = false;
     this.isInGodFatherState = false;
+    this.isDrCitySavedHimselfAllready = false;
 
     this.professionalTargetUsername = "";
     this.detectiveSuspicionTarget = "";
@@ -44,6 +50,30 @@ public class GameState implements Serializable {
     this.alivePlayerUsernames = new ArrayList<>();
     this.aliveMafiaUsernames = new ArrayList<>();
     this.aliveCitizenUsernames = new ArrayList<>();
+  }
+
+  public boolean getIsInDrCityState() {
+    return this.isInDrCityState;
+  }
+
+  public void setIsInDrCityState(boolean status) {
+    this.isInDrCityState = status;
+  }
+
+  public String getDrCitySaveTarget() {
+    return this.drCitySaveTarget;
+  }
+
+  public void setIsDrCitySavedHimselfAllready(boolean status) {
+    this.isDrCitySavedHimselfAllready = status;
+  }
+
+  public boolean getIsDrCitySavedHimselfAllready() {
+    return this.isDrCitySavedHimselfAllready;
+  }
+
+  public void setDrCitySaveTarget(String username) {
+    this.drCitySaveTarget = username;
   }
 
   public boolean getIsInGodFatherState() {

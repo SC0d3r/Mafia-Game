@@ -119,6 +119,18 @@ public class ReadThread extends Thread {
       return;
     }
 
+    if (this.client.getGameState().getIsInDrCityState()) {
+      if (!this.client.isRole(ROLE.DR_CITY)) {
+        System.out.print("DR City is deciding ...");
+      } else {
+        ArrayList<String> aliveCitizen = this.client.getGameState().getAliveCitizenUsernames();
+        System.out.println("Citizen : " + String.join(", ", aliveCitizen));
+        this.printSeperator();
+        System.out.print("Press Enter to select your target ...");
+      }
+      return;
+    }
+
     if (this.client.getGameState().getIsInGodFatherState()) {
       if (!this.client.isRole(ROLE.GOD_FATHER)) {
         System.out.print("God Father is deciding ...");
