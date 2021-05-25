@@ -10,6 +10,8 @@ public class GameState implements Serializable {
   private boolean isInDetectiveState;
   private String detectiveSuspicionTarget;
   private boolean isVotingEnabled;
+  private boolean isInDieHardState;
+  private boolean isDieHardRequestedInvestigation;
   private ArrayList<String> alivePlayerUsernames;
   private volatile HashMap<String, String> votes;
 
@@ -17,12 +19,30 @@ public class GameState implements Serializable {
     this.isInPsychologistState = false;
     this.isInProfessionalState = false;
     this.isInDetectiveState = false;
+    this.isInDieHardState = false;
+    this.isDieHardRequestedInvestigation = false;
     this.professionalTargetUsername = "";
     this.detectiveSuspicionTarget = "";
     this.isInMayorState = false;
     this.alivePlayerUsernames = new ArrayList<>();
     this.isVotingEnabled = false;
     this.votes = new HashMap<>();
+  }
+
+  public boolean getIsDieHardRequestedInvestigation() {
+    return this.isDieHardRequestedInvestigation;
+  }
+
+  public void setIsDieHardRequestedInvestigation(boolean status) {
+    this.isDieHardRequestedInvestigation = status;
+  }
+
+  public boolean getIsInDieHardState() {
+    return this.isInDieHardState;
+  }
+
+  public void setIsInDieHardState(boolean status) {
+    this.isInDieHardState = status;
   }
 
   public void clearVotes() {

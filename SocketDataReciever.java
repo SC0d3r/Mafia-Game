@@ -45,6 +45,14 @@ public class SocketDataReciever {
     return response.contains(SocketDataSender.DETECTIVE_QUERY);
   }
 
+  public boolean isDieHardRequest(String response) {
+    return response.contains(SocketDataSender.DIEHARD_REQUESTED_INVESTIGATION);
+  }
+
+  public boolean extractDieHardRequest(String response) {
+    return Boolean.valueOf(response.split(SocketDataSender.SEPERATOR)[1]);
+  }
+
   public String extractDetectiveQuery(String response) {
     return response.split(SocketDataSender.SEPERATOR)[1];
   }

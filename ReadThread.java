@@ -97,6 +97,16 @@ public class ReadThread extends Thread {
       return;
     }
 
+    if (this.client.getGameState().getIsInDieHardState()) {
+      if (!this.client.isRole(ROLE.DIE_HARD)) {
+        System.out.print("DIEHARD is deciding ...");
+      } else {
+        this.printSeperator();
+        System.out.print("Press Enter to start ...");
+      }
+      return;
+    }
+
     if (this.client.getGameState().getIsInPsychologistState() && this.client.getPlayer().getIsAlive()) {
       if (!this.client.isRole(ROLE.PSYCHOLOGIST)) {
         System.out.print("Psychologist is deciding ...");

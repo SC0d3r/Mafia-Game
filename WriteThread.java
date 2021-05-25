@@ -28,9 +28,14 @@ public class WriteThread extends Thread {
     }
   }
 
-  private boolean isAValidMayorVote(String respose) {
+  private boolean isAValidYesNoResponse(String respose) {
     respose = respose.trim().toLowerCase();
     return respose.equals("y") || respose.equals("yes") || respose.equals("n") || respose.equals("no");
+  }
+
+  private boolean createBooleanFromYesNo(String yesNo) {
+    yesNo = yesNo.toLowerCase();
+    return yesNo.equals("y") || yesNo.equals("yes");
   }
 
   @Override
@@ -151,13 +156,29 @@ public class WriteThread extends Thread {
         return text;
     }
 
+    if (this.client.getGameState().getIsInDieHardState()) {
+      if (this.client.isRole(ROLE.DIE_HARD)) {
+        while (this.client.getGameState().getIsInDieHardState() && this.client.getPlayer().getIsAlive()) {
+          text = console.readLine("[~] Do you want to start investigation [Y/N]? ").trim();
+          if (this.isAValidYesNoResponse(text) || !this.client.getGameState().getIsInDieHardState())
+            break;
+        }
+        if (this.client.getGameState().getIsInDieHardState() && this.client.getPlayer().getIsAlive()) {
+          System.out.println("You chose: " + text);
+          this.wirter.println(this.dataSender.createDieHardRequest(this.createBooleanFromYesNo(text)));
+        }
+      }
+      if (this.client.getGameState().getIsInDieHardState())
+        return text;
+    }
+
     if (this.client.getGameState().getIsInMayorState()) {
       if (this.client.isRole(ROLE.MAYOR)) {
         while (true) {
           if (!this.client.getGameState().getIsInMayorState() || !this.client.isAlive())
             break;
           text = console.readLine("[~] Do you want to cancel voting [Y/N]? ").trim();
-          if (this.isAValidMayorVote(text))
+          if (this.isAValidYesNoResponse(text))
             break;
         }
 

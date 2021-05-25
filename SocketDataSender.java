@@ -30,6 +30,7 @@ public class SocketDataSender {
   public static final String SEND_GAME_STATE = "::SEND_GAME_STATE";
   public static final String PROFESSIONAL_TARGET = "::PROFESSIONAL_TARGET";
   public static final String DETECTIVE_QUERY = "::DETECTIVE_QUERY";
+  public static final String DIEHARD_REQUESTED_INVESTIGATION = "::DIEHARD_REQUESTED_INVESTIGATION";
 
   public SocketDataSender() {
   }
@@ -37,6 +38,10 @@ public class SocketDataSender {
   public String createPlayerState(Player p) {
     String data = p.serialize();
     return SEND_PLAYER_STATE + SEPERATOR + data;
+  }
+
+  public String createDieHardRequest(boolean status) {
+    return DIEHARD_REQUESTED_INVESTIGATION + SEPERATOR + status;
   }
 
   public String createProfessionalTarget(String username) {

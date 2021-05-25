@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.management.relation.Role;
-
 class GameServer {
   private int port;
   private volatile Set<String> usernames;

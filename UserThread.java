@@ -89,6 +89,11 @@ public class UserThread extends Thread {
           continue;
         }
 
+        if (this.dataReciever.isDieHardRequest(clientMessage)) {
+          boolean status = this.dataReciever.extractDieHardRequest(clientMessage);
+          this.gameServer.getGameState().setIsDieHardRequestedInvestigation(status);
+        }
+
         if (this.dataReciever.isPsychologistRequest(clientMessage)) {
           String toBeSilencedUsername = this.dataReciever.extractPshychologistRequest(clientMessage);
           Player toBeSilenced = this.gameServer.getPlayerByUsername(toBeSilencedUsername);
