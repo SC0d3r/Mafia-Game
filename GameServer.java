@@ -288,6 +288,7 @@ class GameServer {
     this.getGameState().setAlivePlayerUsernames(aliveUsernames);
     this.getGameState().setAliveMafiaUsernames(aliveMafiaUsernames);
     this.getGameState().setAliveCitizenUsernames(aliveCitizenUsernamese);
+    this.sendPlayerStateToClients();
   }
 
   public boolean isMafia(String username) {
