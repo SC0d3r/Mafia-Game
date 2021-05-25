@@ -20,6 +20,7 @@ public class GameState implements Serializable {
   private String drLacterCuresUsername;
   private boolean isInDrCityState;
   private String drCitySaveTarget;
+  private boolean isInIntroductionState;
   private boolean isDrCitySavedHimselfAllready;
   private ArrayList<String> alivePlayerUsernames;
   private ArrayList<String> aliveMafiaUsernames;
@@ -32,6 +33,7 @@ public class GameState implements Serializable {
     this.isInDetectiveState = false;
     this.isInDrLacterState = false;
     this.isInDieHardState = false;
+    this.isInIntroductionState = false;
     this.isInMafiaGatheringState = false;
     this.isInDrCityState = false;
     this.drCitySaveTarget = "";
@@ -54,6 +56,14 @@ public class GameState implements Serializable {
 
   public boolean getIsInDrCityState() {
     return this.isInDrCityState;
+  }
+
+  public boolean getIsInIntroductionState() {
+    return this.isInIntroductionState;
+  }
+
+  public void setIsInIntroductionState(boolean status) {
+    this.isInIntroductionState = status;
   }
 
   public void setIsInDrCityState(boolean status) {

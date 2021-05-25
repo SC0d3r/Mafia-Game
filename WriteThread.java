@@ -176,6 +176,10 @@ public class WriteThread extends Thread {
         return text;
     }
 
+    if (this.client.getGameState().getIsInIntroductionState()) {
+      return text;
+    }
+
     if (this.client.getGameState().getIsInDrCityState()) {
       if (this.client.isRole(ROLE.DR_CITY)) {
         while (this.client.getGameState().getIsInDrCityState() && this.client.getPlayer().getIsAlive()) {
@@ -289,7 +293,7 @@ public class WriteThread extends Thread {
         return text;
       // maybe state changed while stuck in readline function
       if (this.client.getPlayer().getCanChat() && !this.client.getPlayer().getIsSilenced()
-          && this.client.getPlayer().getIsAlive()) {
+          && this.client.getPlayer().getIsAlive() && !this.client.getGameState().getIsInIntroductionState()) {
         this.wirter.println(text);
       }
 

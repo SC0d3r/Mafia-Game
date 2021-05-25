@@ -142,6 +142,12 @@ public class ReadThread extends Thread {
       }
       return;
     }
+    if (this.client.getGameState().getIsInIntroductionState()) {
+      System.out.println();
+      this.printSeperator();
+      System.out.print("Wait till introduction finishes.");
+      return;
+    }
 
     if (this.client.getGameState().getIsInMafiaGatheringState()) {
       if (!this.client.getGameState().getAliveMafiaUsernames().contains(this.client.getUsername())) {

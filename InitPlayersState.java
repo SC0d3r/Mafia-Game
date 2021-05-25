@@ -13,11 +13,15 @@ public class InitPlayersState extends ServerState {
 
   @Override
   public boolean run() {
+    this.gameServer.getGameState().setIsInIntroductionState(true);
+    this.gameServer.sendGameStateToClients();
+
     this.setPlayersRoles();
     this.gameServer.sendPlayerStateToClients();
     this.initGameState();
     this.gameServer.sendGameStateToClients();
     this.createPlayersHeaderInfoBar();
+
     this.narrator.changeState(STATES.INTRODUCE_MAFIAS);
     return false;
   }
@@ -40,7 +44,6 @@ public class InitPlayersState extends ServerState {
       UTIL.sleep(40);
       p.sendMessage(role);
       UTIL.sleep(40);
-      p.sendMessage(SocketDataSender.DISABLE_CHAT);
     }
   }
 
