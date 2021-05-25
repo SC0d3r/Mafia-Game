@@ -13,7 +13,8 @@ public class MayorDecisioningState extends ServerState {
   public boolean run() {
     HashMap<String, String> votes = this.gameServer.getGameState().getVotes();
     this.gameServer.getGameState().clearVotes();
-    if (this.isThereMayorInGame()) {
+    if (this.gameServer.isPlayerInGame(ROLE.MAYOR)) {
+      // if (this.isThereMayorInGame() ) {
       this.gameServer.getGameState().setIsInMayorState(true);
       this.gameServer.sendGameStateToClients();
       UTIL.setTimerFor(10, this.gameServer.getReadyPlayers());
@@ -28,12 +29,9 @@ public class MayorDecisioningState extends ServerState {
         this.gameServer.getGameState().setAlivePlayerUsernames(this.gameServer.getAlivePlayersUsernames());
         this.gameData.addNews("<" + mostVotedPlayer.getUsername() + "> voted out!");
       }
-      // else
-      // this.gameData.addNews("Nothing happend!");
     }
 
-    if (this.isThereMayorInGame())
-      this.gameServer.getGameState().setIsInMayorState(false);
+    this.gameServer.getGameState().setIsInMayorState(false);
     this.gameServer.sendGameStateToClients();
     this.narrator.changeState(STATES.BEGIN_NIGHT);
     return false;
@@ -41,9 +39,5 @@ public class MayorDecisioningState extends ServerState {
 
   private boolean isVotingGotCanceledByMayor() {
     return this.gameData.getIsVotingGotCanceled();
-  }
-
-  private boolean isThereMayorInGame() {
-    return this.gameServer.getPlayerByRole(ROLE.MAYOR) != null;
   }
 }

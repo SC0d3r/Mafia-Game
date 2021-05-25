@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.management.relation.Role;
+
 class GameServer {
   private int port;
   private volatile Set<String> usernames;
@@ -245,6 +247,20 @@ class GameServer {
 
     System.out.println("User [" + username + "] is realy ***** ready for the game.");
     this.readyPlayers.add(new Player(username, ROLE.CITIZEN, user));
+  }
+
+  public ArrayList<Player> getDeadPlayers() {
+    ArrayList<Player> result = new ArrayList<>();
+    for (Player p : this.readyPlayers) {
+      if (!p.getIsAlive())
+        result.add(p);
+    }
+    return result;
+  }
+
+  public boolean isPlayerInGame(ROLE role) {
+    Player p = this.getPlayerByRole(role);
+    return p != null && p.getIsAlive();
   }
 
   public boolean isMafia(String username) {

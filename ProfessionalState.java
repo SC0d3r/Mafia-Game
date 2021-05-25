@@ -9,6 +9,11 @@ public class ProfessionalState extends ServerState {
 
   @Override
   public boolean run() {
+    if (!this.gameServer.isPlayerInGame(ROLE.PROFESSIONAL)) {
+      this.narrator.changeState(STATES.DETECTIVE);
+      return false;
+    }
+
     this.gameServer.getGameState().setIsInProfessionalState(true);
     this.gameServer.sendGameStateToClients();
     UTIL.setTimerFor(20, this.gameServer.getReadyPlayers());
