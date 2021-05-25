@@ -13,8 +13,10 @@ public class DrCityState extends ServerState {
     System.out.println("GOD FATHER TARGET: " + godFatherTarget);
     Player target = this.gameServer.getPlayerByUsername(godFatherTarget);
     if (!this.gameServer.isPlayerInGame(ROLE.DR_CITY)) {
-      this.gameServer.killPlayer(target);
-      this.gameData.addNews("[X_x] " + godFatherTarget + " got killed last night.");
+      if (target != null) {// if god father chose someone
+        this.gameServer.killPlayer(target);
+        this.gameData.addNews("[X_x] " + godFatherTarget + " got killed last night.");
+      }
       this.narrator.changeState(STATES.DETECTIVE);
       return false;
     }
@@ -27,14 +29,17 @@ public class DrCityState extends ServerState {
     String drCitySaveTarget = this.gameServer.getGameState().getDrCitySaveTarget();
     this.gameServer.getGameState().setDrCitySaveTarget("");// reseting
 
-    if (drCitySaveTarget.equals(godFatherTarget)) {
-      if (this.gameServer.getPlayerByRole(ROLE.DR_CITY).getUsername().equals(drCitySaveTarget)) {
-        this.gameServer.getGameState().setIsDrCitySavedHimselfAllready(true);
+    // target != null means god father chose someone to kill
+    if (target != null) {
+      if (drCitySaveTarget.equals(godFatherTarget)) {
+        if (doesDrCityWantToSaveHimself(drCitySaveTarget)) {
+          this.gameServer.getGameState().setIsDrCitySavedHimselfAllready(true);
+        }
+        this.gameData.addNews("[+] Dr.City saved a citizen last night.");
+      } else {
+        this.gameServer.killPlayer(target);
+        this.gameData.addNews("[X_x] " + godFatherTarget + " got killed last night.");
       }
-      this.gameData.addNews("[+] Dr.City saved a citizen last night.");
-    } else {
-      this.gameServer.killPlayer(target);
-      this.gameData.addNews("[X_x] " + godFatherTarget + " got killed last night.");
     }
 
     this.gameServer.getGameState().setIsInDrCityState(false);
@@ -42,6 +47,10 @@ public class DrCityState extends ServerState {
 
     this.narrator.changeState(STATES.DETECTIVE);
     return false;
+  }
+
+  private boolean doesDrCityWantToSaveHimself(String drCitySaveTarget) {
+    return this.gameServer.getPlayerByRole(ROLE.DR_CITY).getUsername().equals(drCitySaveTarget);
   }
 
 }
