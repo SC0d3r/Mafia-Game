@@ -1,9 +1,6 @@
 public class DRLacterState extends ServerState {
-  private GameData gameData;
-
-  public DRLacterState(Narrator narrator, GameServer server, GameData gameData) {
+  public DRLacterState(Narrator narrator, GameServer server) {
     super(narrator, server);
-    this.gameData = gameData;
   }
 
   @Override
