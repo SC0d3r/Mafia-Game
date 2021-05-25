@@ -12,6 +12,10 @@ public class BeginDayState extends ServerState {
 
   @Override
   public boolean run() {
+    // this is for clearing the welcome and introduction of mafia and dr to mayor
+    // etc...
+    this.narrator.broadcast(SocketDataSender.SAVE_AND_CLEAR_CHAT, this.gameServer.getReadyPlayers());
+
     this.gameData.updateDayTime(DAYTIME.DAY);
     String timeOfDay = this.dataSender.createInfo("TIME", DAYTIME.toString(this.gameData.getDayTime()));
     this.narrator.broadcast(timeOfDay, this.gameServer.getReadyPlayers());
