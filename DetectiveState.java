@@ -31,7 +31,7 @@ public class DetectiveState extends ServerState {
     this.gameServer.getGameState().setIsInDetectiveState(false);
     this.gameServer.sendGameStateToClients();
 
-    this.narrator.changeState(STATES.DIEHARD);
+    this.narrator.changeState(STATES.PROFESSIONAL);
     return false;
   }
 

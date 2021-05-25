@@ -18,7 +18,7 @@ public class OnlyVotingChatState extends ServerState {
     this.gameServer.getGameState().setIsVotingEnabled(false);
     this.gameServer.sendGameStateToClients();
 
-    this.narrator.changeState(STATES.DR_LACTER);
+    this.narrator.changeState(STATES.MAYOR_DECISIONING);
 
     return false;
   }

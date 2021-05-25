@@ -18,7 +18,7 @@ public class PsychologistState extends ServerState {
       this.gameServer.getGameState().setIsInPsychologistState(false);
       this.gameServer.sendGameStateToClients();
     }
-    this.narrator.changeState(STATES.PROFESSIONAL);
+    this.narrator.changeState(STATES.DIEHARD);
     return false;
   }
 

@@ -14,11 +14,11 @@ public class DRLacterState extends ServerState {
 
     UTIL.setTimerFor(20, this.gameServer.getReadyPlayers());
 
-    this.checkIsDrLacterSavingHimself();
+    // this.checkIsDrLacterSavingHimself();
 
     this.gameServer.getGameState().setIsInDrLacterState(false);
     this.gameServer.sendGameStateToClients();
-    this.narrator.changeState(STATES.PSYCHOLOGIST);
+    this.narrator.changeState(STATES.DR_CITY);
     return false;
   }
 

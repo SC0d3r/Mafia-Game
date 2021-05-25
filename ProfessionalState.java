@@ -25,7 +25,7 @@ public class ProfessionalState extends ServerState {
     this.gameServer.getGameState().setIsInProfessionalState(false);
     this.gameServer.getGameState().setProfessionalTarget("");
     this.gameServer.sendGameStateToClients();
-    this.narrator.changeState(STATES.DETECTIVE);
+    this.narrator.changeState(STATES.PSYCHOLOGIST);
     return false;
   }
 
@@ -42,6 +42,9 @@ public class ProfessionalState extends ServerState {
     this.gameServer.getGameState().setDrLacterCuresUsername("");// reseting
 
     if (target.getUsername().equals(drLacterCuresUsername)) {
+      if (this.gameServer.getPlayerByRole(ROLE.DR_LACTER).getUsername().equals(drLacterCuresUsername)) {
+        this.gameServer.getGameState().setIsDrLacterSavedHimselfAllready(true);
+      }
       this.gameData.addNews("[+] DR.Lacter saved a mafia player!");
     } else {
       this.gameServer.killPlayer(target);
