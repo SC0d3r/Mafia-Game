@@ -119,6 +119,18 @@ public class ReadThread extends Thread {
       return;
     }
 
+    if (this.client.getGameState().getIsInGodFatherState()) {
+      if (!this.client.isRole(ROLE.GOD_FATHER)) {
+        System.out.print("God Father is deciding ...");
+      } else {
+        ArrayList<String> aliveCitizen = this.client.getGameState().getAliveCitizenUsernames();
+        System.out.println("Targets: " + String.join(", ", aliveCitizen));
+        this.printSeperator();
+        System.out.print("Press Enter to select your target ...");
+      }
+      return;
+    }
+
     if (this.client.getGameState().getIsInMafiaGatheringState()) {
       if (!this.client.getGameState().getAliveMafiaUsernames().contains(this.client.getUsername())) {
         System.out.print("Mafia Members are talking to each other ...");

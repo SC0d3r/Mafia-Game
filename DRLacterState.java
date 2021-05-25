@@ -18,7 +18,7 @@ public class DRLacterState extends ServerState {
 
     this.gameServer.getGameState().setIsInDrLacterState(false);
     this.gameServer.sendGameStateToClients();
-    this.narrator.changeState(STATES.MAYOR_DECISIONING);
+    this.narrator.changeState(STATES.PSYCHOLOGIST);
     return false;
   }
 

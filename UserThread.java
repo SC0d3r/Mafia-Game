@@ -123,6 +123,12 @@ public class UserThread extends Thread {
           continue;
         }
 
+        if (this.dataReciever.isGodFatherTargetUsername(clientMessage)) {
+          String targetUsername = this.dataReciever.extractGodFatherTargetUsername(clientMessage);
+          this.gameServer.getGameState().setGodFatherTargetUsername(targetUsername);
+          continue;
+        }
+
         if (this.dataReciever.isDetectiveQuery(clientMessage)) {
           String queryUsername = this.dataReciever.extractDetectiveQuery(clientMessage);
           this.gameServer.getGameState().setDetectiveSuspicionTarget(queryUsername);

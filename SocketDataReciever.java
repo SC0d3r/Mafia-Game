@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import jdk.javadoc.doclet.Reporter;
+
 public class SocketDataReciever {
   private HashMap<String, String> headerInformation;
   private ArrayList<String> chatMessages;
@@ -194,6 +196,14 @@ public class SocketDataReciever {
       String[] tagAndText = this.extractHeaderInfo(info);
       this.headerInformation.put(tagAndText[0], tagAndText[1]);
     }
+  }
+
+  public boolean isGodFatherTargetUsername(String response) {
+    return response.contains(SocketDataSender.GOD_FATHER_TARGET_USERNAME);
+  }
+
+  public String extractGodFatherTargetUsername(String response) {
+    return response.split(SocketDataSender.SEPERATOR)[1];
   }
 
   public boolean isVotingMapForServer(String response) {

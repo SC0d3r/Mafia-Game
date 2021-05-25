@@ -206,6 +206,23 @@ public class WriteThread extends Thread {
         return text;
     }
 
+    if (this.client.getGameState().getIsInGodFatherState()) {
+      if (this.client.isRole(ROLE.GOD_FATHER)) {
+        while (this.client.getGameState().getIsInGodFatherState() && this.client.getPlayer().getIsAlive()) {
+          text = console.readLine("[X] Who do you want to kill? ").trim();
+          if (this.client.getGameState().getAliveCitizenUsernames().contains(text)
+              || !this.client.getGameState().getIsInGodFatherState())
+            break;
+        }
+        if (this.client.getGameState().getIsInGodFatherState() && this.client.getPlayer().getIsAlive()) {
+          System.out.println("You chose: " + text);
+          this.wirter.println(this.dataSender.createGodFatherTarget(text));
+        }
+      }
+      if (this.client.getGameState().getIsInGodFatherState())
+        return text;
+    }
+
     if (this.client.getGameState().getIsInMayorState()) {
       if (this.client.isRole(ROLE.MAYOR)) {
         while (true) {

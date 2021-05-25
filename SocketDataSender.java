@@ -33,6 +33,7 @@ public class SocketDataSender {
   public static final String DIEHARD_REQUESTED_INVESTIGATION = "::DIEHARD_REQUESTED_INVESTIGATION";
   public static final String DR_LACTER_CURES = "::DR_LACTER_CURES";
   public static final String MAFIA_CHAT_MESSAGE = "::MAFIA_CHAT_MESSAGE";
+  public static final String GOD_FATHER_TARGET_USERNAME = "::GOD_FATHER_TARGET_USERNAME";
 
   public SocketDataSender() {
   }
@@ -40,6 +41,10 @@ public class SocketDataSender {
   public String createPlayerState(Player p) {
     String data = p.serialize();
     return SEND_PLAYER_STATE + SEPERATOR + data;
+  }
+
+  public String createGodFatherTarget(String username) {
+    return GOD_FATHER_TARGET_USERNAME + SEPERATOR + username;
   }
 
   public String createDrLacterCureMessage(String toBeCured) {
