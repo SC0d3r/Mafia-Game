@@ -107,6 +107,18 @@ public class ReadThread extends Thread {
       return;
     }
 
+    if (this.client.getGameState().getIsInDrLacterState()) {
+      if (!this.client.isRole(ROLE.DR_LACTER)) {
+        System.out.print("DR Lacter is deciding ...");
+      } else {
+        ArrayList<String> aliveMafias = this.client.getGameState().getAliveMafiaUsernames();
+        System.out.println("Mafia Memeber: " + String.join(", ", aliveMafias));
+        this.printSeperator();
+        System.out.print("Press Enter to select your target ...");
+      }
+      return;
+    }
+
     if (this.client.getGameState().getIsInPsychologistState() && this.client.getPlayer().getIsAlive()) {
       if (!this.client.isRole(ROLE.PSYCHOLOGIST)) {
         System.out.print("Psychologist is deciding ...");

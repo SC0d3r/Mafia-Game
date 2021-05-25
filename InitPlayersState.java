@@ -15,15 +15,17 @@ public class InitPlayersState extends ServerState {
   public boolean run() {
     this.setPlayersRoles();
     this.gameServer.sendPlayerStateToClients();
-    this.sendGameStateToClients();
+    this.initGameState();
+    this.gameServer.sendGameStateToClients();
     this.createPlayersHeaderInfoBar();
     this.narrator.changeState(STATES.INTRODUCE_MAFIAS);
     return false;
   }
 
-  private void sendGameStateToClients() {
+  private void initGameState() {
     this.gameServer.getGameState().setAlivePlayerUsernames(this.gameServer.getAlivePlayersUsernames());
-    this.gameServer.sendGameStateToClients();
+    this.gameServer.getGameState().setAliveMafiaUsernames(this.gameServer.getAliveMafiaUsernames());
+    this.gameServer.getGameState().setAliveCitizenUsernames(this.gameServer.getAliveCitizenUsernames());
   }
 
   private void createPlayersHeaderInfoBar() {
@@ -53,8 +55,8 @@ public class InitPlayersState extends ServerState {
 
   private ArrayList<ROLE> createRoles() {
     int howManyPlayers = this.gameServer.getReadyPlayers().size();
-    ROLE[] allRoles = { ROLE.PROFESSIONAL, ROLE.MAFIA_MEMBER, ROLE.DIE_HARD, ROLE.PSYCHOLOGIST, ROLE.DR_CITY,
-        ROLE.MAYOR, ROLE.DR_LACTER, ROLE.DETECTIVE, ROLE.CITIZEN, ROLE.GOD_FATHER };
+    ROLE[] allRoles = { ROLE.PROFESSIONAL, ROLE.MAFIA_MEMBER, ROLE.DR_LACTER, ROLE.PSYCHOLOGIST, ROLE.DR_CITY,
+        ROLE.MAYOR, ROLE.DIE_HARD, ROLE.DETECTIVE, ROLE.CITIZEN, ROLE.GOD_FATHER };
 
     ArrayList<ROLE> result = new ArrayList<>();
     for (int i = 0; i < howManyPlayers; i++) {

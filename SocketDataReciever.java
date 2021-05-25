@@ -53,6 +53,14 @@ public class SocketDataReciever {
     return Boolean.valueOf(response.split(SocketDataSender.SEPERATOR)[1]);
   }
 
+  public boolean isDrLacterCureMessage(String response) {
+    return response.contains(SocketDataSender.DR_LACTER_CURES);
+  }
+
+  public String extractDrLacterCuresUsername(String response) {
+    return response.split(SocketDataSender.SEPERATOR)[1];
+  }
+
   public String extractDetectiveQuery(String response) {
     return response.split(SocketDataSender.SEPERATOR)[1];
   }

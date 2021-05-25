@@ -31,6 +31,7 @@ public class SocketDataSender {
   public static final String PROFESSIONAL_TARGET = "::PROFESSIONAL_TARGET";
   public static final String DETECTIVE_QUERY = "::DETECTIVE_QUERY";
   public static final String DIEHARD_REQUESTED_INVESTIGATION = "::DIEHARD_REQUESTED_INVESTIGATION";
+  public static final String DR_LACTER_CURES = "::DR_LACTER_CURES";
 
   public SocketDataSender() {
   }
@@ -38,6 +39,10 @@ public class SocketDataSender {
   public String createPlayerState(Player p) {
     String data = p.serialize();
     return SEND_PLAYER_STATE + SEPERATOR + data;
+  }
+
+  public String createDrLacterCureMessage(String toBeCured) {
+    return DR_LACTER_CURES + SEPERATOR + toBeCured;
   }
 
   public String createDieHardRequest(boolean status) {

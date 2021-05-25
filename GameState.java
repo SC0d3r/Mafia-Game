@@ -12,21 +12,72 @@ public class GameState implements Serializable {
   private boolean isVotingEnabled;
   private boolean isInDieHardState;
   private boolean isDieHardRequestedInvestigation;
+  private boolean isInDrLacterState;
+  private boolean isDrLacterSavedHimselfAllready;
+  private String drLacterCuresUsername;
   private ArrayList<String> alivePlayerUsernames;
+  private ArrayList<String> aliveMafiaUsernames;
+  private ArrayList<String> aliveCitizenUsernames;
   private volatile HashMap<String, String> votes;
 
   public GameState() {
     this.isInPsychologistState = false;
     this.isInProfessionalState = false;
     this.isInDetectiveState = false;
+    this.isInDrLacterState = false;
     this.isInDieHardState = false;
+    this.drLacterCuresUsername = "";
+    this.isDrLacterSavedHimselfAllready = false;
     this.isDieHardRequestedInvestigation = false;
+
     this.professionalTargetUsername = "";
     this.detectiveSuspicionTarget = "";
     this.isInMayorState = false;
-    this.alivePlayerUsernames = new ArrayList<>();
     this.isVotingEnabled = false;
     this.votes = new HashMap<>();
+    this.alivePlayerUsernames = new ArrayList<>();
+    this.aliveMafiaUsernames = new ArrayList<>();
+    this.aliveCitizenUsernames = new ArrayList<>();
+  }
+
+  public ArrayList<String> getAliveCitizenUsernames() {
+    return this.aliveCitizenUsernames;
+  }
+
+  public void setAliveCitizenUsernames(ArrayList<String> usernames) {
+    this.aliveCitizenUsernames = usernames;
+  }
+
+  public ArrayList<String> getAliveMafiaUsernames() {
+    return this.aliveMafiaUsernames;
+  }
+
+  public void setAliveMafiaUsernames(ArrayList<String> usernames) {
+    this.aliveMafiaUsernames = usernames;
+  }
+
+  public void setDrLacterCuresUsername(String username) {
+    this.drLacterCuresUsername = username;
+  }
+
+  public String getDrLacterCuresUsername() {
+    return this.drLacterCuresUsername;
+  }
+
+  public boolean getIsDrLacterSavedHimselfAllready() {
+    return this.isDrLacterSavedHimselfAllready;
+  }
+
+  public void setIsDrLacterSavedHimselfAllready(boolean status) {
+    this.isDrLacterSavedHimselfAllready = status;
+  }
+
+  public void setIsInDrLacterState(boolean status) {
+    this.isInDrLacterState = status;
+  }
+
+  public boolean getIsInDrLacterState() {
+    return this.isInDrLacterState;
   }
 
   public boolean getIsDieHardRequestedInvestigation() {

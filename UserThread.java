@@ -89,9 +89,16 @@ public class UserThread extends Thread {
           continue;
         }
 
+        if (this.dataReciever.isDrLacterCureMessage(clientMessage)) {
+          String toBeCuredUsername = this.dataReciever.extractDrLacterCuresUsername(clientMessage);
+          this.gameServer.getGameState().setDrLacterCuresUsername(toBeCuredUsername);
+          continue;
+        }
+
         if (this.dataReciever.isDieHardRequest(clientMessage)) {
           boolean status = this.dataReciever.extractDieHardRequest(clientMessage);
           this.gameServer.getGameState().setIsDieHardRequestedInvestigation(status);
+          continue;
         }
 
         if (this.dataReciever.isPsychologistRequest(clientMessage)) {

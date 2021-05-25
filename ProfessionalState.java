@@ -31,23 +31,28 @@ public class ProfessionalState extends ServerState {
 
   private void checkProfessionalTarget(String professionalTarget) {
     if (this.isTargetACitizen(professionalTarget)) {
-      this.gameServer.getPlayerByRole(ROLE.PROFESSIONAL).kill();
+      Player professional = this.gameServer.getPlayerByRole(ROLE.PROFESSIONAL);
+      this.gameServer.killPlayer(professional);
       this.gameServer.sendPlayerStateToClients();
       this.gameData.addNews("Professional got kicked out! for a wrong shot :D ");
       return;
     }
     Player target = this.gameServer.getPlayerByUsername(professionalTarget);
-    target.kill();
+    String drLacterCuresUsername = this.gameServer.getGameState().getDrLacterCuresUsername();
+    this.gameServer.getGameState().setDrLacterCuresUsername("");// reseting
+
+    if (target.getUsername().equals(drLacterCuresUsername)) {
+      this.gameData.addNews("[+] DR.Lacter saved a mafia player!");
+    } else {
+      this.gameServer.killPlayer(target);
+      this.gameData.addNews(target.getUsername() + " Got killed [X_x] by professional last night.");
+    }
+
     this.gameServer.sendPlayerStateToClients();
-    this.gameData.addNews(target.getUsername() + " Got killed [X_x] by professional last night.");
   }
 
   private boolean isTargetACitizen(String targetUsername) {
     return !this.gameServer.isMafia(targetUsername);
-    // Player target = this.gameServer.getPlayerByUsername(targetUsername);
-    // return target.getRole() != ROLE.GOD_FATHER && target.getRole() !=
-    // ROLE.DR_LACTER
-    // && target.getRole() != ROLE.MAFIA_MEMBER;
   }
 
 }

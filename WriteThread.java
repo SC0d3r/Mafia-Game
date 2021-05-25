@@ -156,6 +156,26 @@ public class WriteThread extends Thread {
         return text;
     }
 
+    if (this.client.getGameState().getIsInDrLacterState()) {
+      if (this.client.isRole(ROLE.DR_LACTER)) {
+        while (this.client.getGameState().getIsInDrLacterState() && this.client.getPlayer().getIsAlive()) {
+          text = console.readLine("[~] Which player do you want to save? ").trim();
+          ArrayList<String> aliveMafiaUsernames = this.client.getGameState().getAliveMafiaUsernames();
+          if (this.client.getGameState().getIsDrLacterSavedHimselfAllready()) {
+            aliveMafiaUsernames.remove(this.client.getUsername());
+          }
+          if (aliveMafiaUsernames.contains(text) || !this.client.getGameState().getIsInDrLacterState())
+            break;
+        }
+        if (this.client.getGameState().getIsInDrLacterState() && this.client.getPlayer().getIsAlive()) {
+          System.out.println("You chose: " + text);
+          this.wirter.println(this.dataSender.createDrLacterCureMessage(text));
+        }
+      }
+      if (this.client.getGameState().getIsInDrLacterState())
+        return text;
+    }
+
     if (this.client.getGameState().getIsInDieHardState()) {
       if (this.client.isRole(ROLE.DIE_HARD)) {
         while (this.client.getGameState().getIsInDieHardState() && this.client.getPlayer().getIsAlive()) {
