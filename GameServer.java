@@ -261,6 +261,35 @@ class GameServer {
     return p != null && p.getIsAlive();
   }
 
+  public ArrayList<String> getAliveMafiaUsernames() {
+    ArrayList<String> result = new ArrayList<>();
+    for (String username : this.getAlivePlayersUsernames()) {
+      if (this.isMafia(username))
+        result.add(username);
+    }
+    return result;
+  }
+
+  public ArrayList<String> getAliveCitizenUsernames() {
+    ArrayList<String> result = new ArrayList<>();
+    for (String username : this.getAlivePlayersUsernames()) {
+      if (!this.isMafia(username))
+        result.add(username);
+    }
+    return result;
+  }
+
+  public void killPlayer(Player p) {
+    p.kill();
+    ArrayList<String> aliveUsernames = this.getAlivePlayersUsernames();
+    ArrayList<String> aliveMafiaUsernames = this.getAliveMafiaUsernames();
+    ArrayList<String> aliveCitizenUsernamese = this.getAliveCitizenUsernames();
+
+    this.getGameState().setAlivePlayerUsernames(aliveUsernames);
+    this.getGameState().setAliveMafiaUsernames(aliveMafiaUsernames);
+    this.getGameState().setAliveCitizenUsernames(aliveCitizenUsernamese);
+  }
+
   public boolean isMafia(String username) {
     Player p = this.getPlayerByUsername(username);
     return p.getRole() == ROLE.GOD_FATHER || p.getRole() == ROLE.DR_LACTER || p.getRole() == ROLE.MAFIA_MEMBER;
