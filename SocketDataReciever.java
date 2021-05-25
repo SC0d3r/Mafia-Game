@@ -61,6 +61,18 @@ public class SocketDataReciever {
     return response.split(SocketDataSender.SEPERATOR)[1];
   }
 
+  public boolean isMafiaChatMessage(String response) {
+    return response.contains(SocketDataSender.MAFIA_CHAT_MESSAGE);
+  }
+
+  public String extractMafiaChatMessageUsername(String response) {
+    return response.split(SocketDataSender.SEPERATOR)[1];
+  }
+
+  public String extractMafiaChatMessageBody(String response) {
+    return response.split(SocketDataSender.SEPERATOR)[2];
+  }
+
   public String extractDetectiveQuery(String response) {
     return response.split(SocketDataSender.SEPERATOR)[1];
   }

@@ -32,6 +32,7 @@ public class SocketDataSender {
   public static final String DETECTIVE_QUERY = "::DETECTIVE_QUERY";
   public static final String DIEHARD_REQUESTED_INVESTIGATION = "::DIEHARD_REQUESTED_INVESTIGATION";
   public static final String DR_LACTER_CURES = "::DR_LACTER_CURES";
+  public static final String MAFIA_CHAT_MESSAGE = "::MAFIA_CHAT_MESSAGE";
 
   public SocketDataSender() {
   }
@@ -43,6 +44,10 @@ public class SocketDataSender {
 
   public String createDrLacterCureMessage(String toBeCured) {
     return DR_LACTER_CURES + SEPERATOR + toBeCured;
+  }
+
+  public String createMafiaChatMessage(String username, String message) {
+    return MAFIA_CHAT_MESSAGE + SEPERATOR + username + SEPERATOR + message;
   }
 
   public String createDieHardRequest(boolean status) {

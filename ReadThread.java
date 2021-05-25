@@ -119,6 +119,16 @@ public class ReadThread extends Thread {
       return;
     }
 
+    if (this.client.getGameState().getIsInMafiaGatheringState()) {
+      if (!this.client.getGameState().getAliveMafiaUsernames().contains(this.client.getUsername())) {
+        System.out.print("Mafia Members are talking to each other ...");
+      } else {
+        this.printSeperator();
+        System.out.print(this.client.getUsername() + ": ");
+      }
+      return;
+    }
+
     if (this.client.getGameState().getIsInPsychologistState() && this.client.getPlayer().getIsAlive()) {
       if (!this.client.isRole(ROLE.PSYCHOLOGIST)) {
         System.out.print("Psychologist is deciding ...");
@@ -141,7 +151,7 @@ public class ReadThread extends Thread {
     }
 
     if (this.client.getUsername() != null) {
-      System.out.println("\n-------------------------------------------------------------");
+      this.printSeperator();
       System.out.print(this.client.getUsername() + ": ");
     } else
       System.out.print("Enter username: ");
@@ -156,7 +166,13 @@ public class ReadThread extends Thread {
   private void draw(String response) {
     System.out.println(this.socketData.getHeaderBarInformations());
     System.out.println(this.socketData.getNews());
-    System.out.println(this.socketData.getChatMessages());
+    if (this.client.getGameState().getIsInMafiaGatheringState()) {
+      if (this.client.isRole(ROLE.MAFIA_MEMBER) || this.client.isRole(ROLE.GOD_FATHER)
+          || this.client.isRole(ROLE.DR_LACTER)) {
+        System.out.println(this.socketData.getChatMessages());
+      }
+    } else
+      System.out.println(this.socketData.getChatMessages());
 
     if (this.client.getGameState().getIsVotingEnabled()) {
       HashMap<String, String> votes = this.client.getGameState().getVotes();
@@ -177,7 +193,7 @@ public class ReadThread extends Thread {
 
     this.socketData.addNews(response);
 
-    if (this.client.getCanChat()) {
+    if (this.client.getCanChat() || this.client.getGameState().getIsInMafiaGatheringState()) {
       this.socketData.addChatMessage(response);
       this.socketData.addChatCommand(response);
     }

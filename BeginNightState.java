@@ -13,7 +13,7 @@ public class BeginNightState extends ServerState {
     this.gameData.updateDayTime(DAYTIME.NIGHT);
     String timeOfDay = this.dataSender.createInfo("TIME", DAYTIME.toString(this.gameData.getDayTime()));
     this.narrator.broadcast(timeOfDay, this.gameServer.getReadyPlayers());
-    this.narrator.changeState(STATES.PSYCHOLOGIST);
+    this.narrator.changeState(STATES.MAFIA_GATHERING);
     return false;
   }
 

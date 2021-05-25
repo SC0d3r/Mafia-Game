@@ -69,6 +69,7 @@ public class UserThread extends Thread {
           myExecutor.execute(new Narrator(this.gameServer, GameData.getInstance()));
           continue;
         }
+
         clientMessage = reader.readLine();
         if (this.dataReciever.isVotingMapForServer(clientMessage)) {
           synchronized (this) {
@@ -113,6 +114,15 @@ public class UserThread extends Thread {
           this.gameServer.getGameState().setProfessionalTarget(toBeKilledUsername);
           continue;
         }
+
+        if (this.dataReciever.isMafiaChatMessage(clientMessage)) {
+          String SenderUsername = this.dataReciever.extractMafiaChatMessageUsername(clientMessage);
+          String SenderMessage = this.dataReciever.extractMafiaChatMessageBody(clientMessage);
+          String chatMessageToSend = this.dataSender.createChatMessage(SenderUsername, SenderMessage);
+          this.gameServer.broadcast(chatMessageToSend, null);
+          continue;
+        }
+
         if (this.dataReciever.isDetectiveQuery(clientMessage)) {
           String queryUsername = this.dataReciever.extractDetectiveQuery(clientMessage);
           this.gameServer.getGameState().setDetectiveSuspicionTarget(queryUsername);

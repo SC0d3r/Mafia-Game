@@ -176,6 +176,20 @@ public class WriteThread extends Thread {
         return text;
     }
 
+    if (this.client.getGameState().getIsInMafiaGatheringState()) {
+      if (this.client.getGameState().getAliveMafiaUsernames().contains(this.client.getUsername())) {
+        text = console.readLine(this.client.getUsername() + ": ");
+        if (this.client.getGameState().getIsInMafiaGatheringState() && this.client.getPlayer().getIsAlive()) {
+          if (text.isBlank())
+            return text;
+          this.wirter.println(this.dataSender.createMafiaChatMessage(this.client.getUsername(), text));
+        }
+      }
+
+      if (this.client.getGameState().getIsInMafiaGatheringState())
+        return text;
+    }
+
     if (this.client.getGameState().getIsInDieHardState()) {
       if (this.client.isRole(ROLE.DIE_HARD)) {
         while (this.client.getGameState().getIsInDieHardState() && this.client.getPlayer().getIsAlive()) {

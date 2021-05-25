@@ -14,6 +14,7 @@ public class GameState implements Serializable {
   private boolean isDieHardRequestedInvestigation;
   private boolean isInDrLacterState;
   private boolean isDrLacterSavedHimselfAllready;
+  private boolean isInMafiaGatheringState;
   private String drLacterCuresUsername;
   private ArrayList<String> alivePlayerUsernames;
   private ArrayList<String> aliveMafiaUsernames;
@@ -26,6 +27,7 @@ public class GameState implements Serializable {
     this.isInDetectiveState = false;
     this.isInDrLacterState = false;
     this.isInDieHardState = false;
+    this.isInMafiaGatheringState = false;
     this.drLacterCuresUsername = "";
     this.isDrLacterSavedHimselfAllready = false;
     this.isDieHardRequestedInvestigation = false;
@@ -38,6 +40,14 @@ public class GameState implements Serializable {
     this.alivePlayerUsernames = new ArrayList<>();
     this.aliveMafiaUsernames = new ArrayList<>();
     this.aliveCitizenUsernames = new ArrayList<>();
+  }
+
+  public void setIsInMafiaGatheringState(boolean status) {
+    this.isInMafiaGatheringState = status;
+  }
+
+  public boolean getIsInMafiaGatheringState() {
+    return this.isInMafiaGatheringState;
   }
 
   public ArrayList<String> getAliveCitizenUsernames() {
