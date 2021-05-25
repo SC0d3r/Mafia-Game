@@ -2,15 +2,19 @@ import java.util.ArrayList;
 
 public class IntroduceMafiaToTheirTeammateState extends ServerState {
 
-  public IntroduceMafiaToTheirTeammateState(Narrator narrator, GameServer server) {
+  private SocketDataSender dataSender;
+
+  public IntroduceMafiaToTheirTeammateState(Narrator narrator, GameServer server, SocketDataSender dataSender) {
     super(narrator, server);
+    this.dataSender = dataSender;
   }
 
   @Override
   public boolean run() {
     ArrayList<Player> mafias = this.getMafias();
     ArrayList<String> messages = this.createIntroductionMessages(mafias);
-    this.narrator.broadcast(String.join("\n", messages), mafias);
+    this.narrator.broadcast(this.dataSender.createChatCommand(String.join(", ", messages)), mafias);
+    UTIL.sleep(2000);
     this.narrator.changeState(STATES.INTRODUCE_DR_TO_MAYOR);
     return false;
   }

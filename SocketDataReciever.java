@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import jdk.javadoc.doclet.Reporter;
-
 public class SocketDataReciever {
   private HashMap<String, String> headerInformation;
   private ArrayList<String> chatMessages;
@@ -281,7 +279,7 @@ public class SocketDataReciever {
     for (Map.Entry<String, String> entry : this.headerInformation.entrySet()) {
       info += entry.getKey() + ":" + entry.getValue() + " | ";
     }
-    info += "\n-------------------------------------------------------------\n";
+    info += "\n-------------------------------------------------------------";
     return info;
   }
 

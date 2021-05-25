@@ -22,7 +22,8 @@ public class Narrator implements Runnable {
     ServerState initPlayersState = new InitPlayersState(this, this.server, this.gameData);
 
     this.states.put(STATES.INIT_PLAYERS, initPlayersState);
-    this.states.put(STATES.INTRODUCE_MAFIAS, new IntroduceMafiaToTheirTeammateState(this, this.server));
+    this.states.put(STATES.INTRODUCE_MAFIAS,
+        new IntroduceMafiaToTheirTeammateState(this, this.server, this.dataSender));
     this.states.put(STATES.INTRODUCE_DR_TO_MAYOR, new IntroduceDrToMayorState(this, this.server, this.dataSender));
     this.states.put(STATES.BEGIN_DAY, new BeginDayState(this, this.server, this.gameData, this.dataSender));
     this.states.put(STATES.WIN_LOST_CHECK, new WinLoseCheckState(this, this.server));

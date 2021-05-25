@@ -60,9 +60,10 @@ public class UserThread extends Thread {
                                                  // instances of Narrator
           for (Player p : this.gameServer.getReadyPlayers()) {
             p.sendMessage(SocketDataSender.BEGIN_GAME);
-            p.sendMessage("\n :::: WELCOME TO MAFIA GAME ::::");
+            p.sendMessage(this.dataSender.createChatCommand("             :::: WELCOME TO MAFIA GAME :::: "));
+            p.sendMessage(this.dataSender.createChatCommand("     "));
           }
-          this.sleep(2000);
+          UTIL.sleep(2000);
           // 2 bellow lines fixes the blocking issue, Otherwise this thread will be busy
           // to recieve or send this user messages
           ExecutorService myExecutor = Executors.newCachedThreadPool();
