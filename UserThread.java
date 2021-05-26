@@ -8,6 +8,11 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * this class will gets spawned whenever a new user(socket) gets accepted by the
+ * server and will read the messages recieved from client and updates the game
+ * state
+ */
 public class UserThread extends Thread {
   private Socket socket;
   private GameServer gameServer;

@@ -1,5 +1,9 @@
 import java.io.Serializable;
 
+/**
+ * this class represents the player of the game that can be serialized and send
+ * back to client whenever one of its states changes
+ */
 public class Player implements Serializable {
   private String username;
   private ROLE role;

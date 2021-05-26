@@ -1,3 +1,6 @@
+/**
+ * this class when gets called introduces the dr to mayor and vice versa
+ */
 public class IntroduceDrToMayorState extends ServerState {
 
   private SocketDataSender dataSender;

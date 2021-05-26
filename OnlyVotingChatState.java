@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/**
+ * this class will enable chat for only voting
+ */
 public class OnlyVotingChatState extends ServerState {
 
   public OnlyVotingChatState(Narrator narrator, GameServer server, SocketDataSender dataSender) {

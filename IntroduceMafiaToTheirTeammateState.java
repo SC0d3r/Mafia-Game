@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/**
+ * this class will introduce mafias to each other
+ */
 public class IntroduceMafiaToTheirTeammateState extends ServerState {
 
   private SocketDataSender dataSender;

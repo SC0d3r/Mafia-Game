@@ -1,6 +1,12 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * this class is the state manager of the game.when all players type ready in
+ * chat this class will get called and starts the game.this class has all the
+ * states of the game and other states use this class to change the current
+ * state of the game
+ */
 public class Narrator implements Runnable {
   private GameServer server;
   private GameData gameData;

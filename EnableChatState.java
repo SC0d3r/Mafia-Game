@@ -1,3 +1,7 @@
+/**
+ * this class enables chat and sets the gamestate with username of players who
+ * can chat
+ */
 public class EnableChatState extends ServerState {
 
   public EnableChatState(Narrator narrator, GameServer server) {

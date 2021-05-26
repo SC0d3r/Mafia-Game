@@ -1,3 +1,6 @@
+/**
+ * disables the chat
+ */
 public class DisableChatState extends ServerState {
 
   public DisableChatState(Narrator narrator, GameServer server) {

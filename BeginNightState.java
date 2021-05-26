@@ -1,3 +1,6 @@
+/**
+ * this class updates the time to Night and its next state is MafiaGathering
+ */
 public class BeginNightState extends ServerState {
   private GameData gameData;
   private SocketDataSender dataSender;

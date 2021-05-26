@@ -1,3 +1,7 @@
+/**
+ * After citizen won the game this class will get created to handle the winning
+ * part
+ */
 public class CitizenWinnerState extends ServerState {
   private GameData gameData;
 

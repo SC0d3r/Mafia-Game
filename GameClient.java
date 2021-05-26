@@ -2,6 +2,9 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+ * sets up the client part of application and spawns 2 threads 1-read 2-write
+ */
 public class GameClient {
   private String hostname;
   private int port;
@@ -59,7 +62,6 @@ public class GameClient {
   }
 
   public boolean doesUsernameExists(String username) {
-    // TODO: add check for duplicate usernames
     return false;
   }
 

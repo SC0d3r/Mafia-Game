@@ -10,6 +10,9 @@ enum DAYTIME {
   }
 }
 
+/**
+ * manages the daytime update and news part of the application
+ */
 public class GameData {
   private static GameData instance;
   private volatile DAYTIME daytime;

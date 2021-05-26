@@ -1,3 +1,7 @@
+/**
+ * this class will enable the chat for only mafias during the night so they can
+ * discuss about their next prey
+ */
 public class MafiaGatheringState extends ServerState {
 
   public MafiaGatheringState(Narrator narrator, GameServer server) {

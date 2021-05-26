@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * this class checks to see if a die hard player is present asks him if he wants
+ * to know the dead player role in response the game news will have the roles of
+ * dead players but in random order
+ */
 public class DieHardState extends ServerState {
   private GameData gameData;
 

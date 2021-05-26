@@ -1,3 +1,6 @@
+/**
+ * this class will just goes to disable chat state
+ */
 public class EndOfDayVotingState extends ServerState {
 
   public EndOfDayVotingState(Narrator narrator, GameServer server) {

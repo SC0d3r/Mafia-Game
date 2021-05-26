@@ -1,3 +1,8 @@
+/**
+ * this class will gets called whenever the night ends to check if the game is
+ * finished. The game finishes whenever the # of mafia players are equel to # of
+ * citizens or the # of mafia players reaches 0
+ */
 public class WinLoseCheckState extends ServerState {
 
   public WinLoseCheckState(Narrator narrator, GameServer server) {

@@ -10,6 +10,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * this class is runnable which we can run it on its own to have a game server
+ * and connect to it with GameClient
+ */
 class GameServer implements Runnable {
   private int port;
   private volatile Set<String> usernames;

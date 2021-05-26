@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * this class is responsible for recieving the characters typed in console in
+ * client part of the application then sanitizes them and sends them back to
+ * server
+ */
 public class WriteThread extends Thread {
   private PrintWriter wirter;
   private Socket socket;

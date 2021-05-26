@@ -1,3 +1,6 @@
+/**
+ * this class will gets called when the mafias are the winner of the game
+ */
 public class MafiaWinnerState extends ServerState {
   private GameData gameData;
 

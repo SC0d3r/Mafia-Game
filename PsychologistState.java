@@ -1,3 +1,7 @@
+/**
+ * this class checks to see if a psychologist is in the game and if there is
+ * asks him if he wants to silence someone
+ */
 public class PsychologistState extends ServerState {
 
   public PsychologistState(Narrator narrator, GameServer server, SocketDataSender dataSender) {

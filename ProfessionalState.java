@@ -1,3 +1,8 @@
+/**
+ * this class will check if there is a professional in the game and if there is
+ * one , Asks him if he wants to kill a player if he kills a citizen he will get
+ * killed instead
+ */
 public class ProfessionalState extends ServerState {
 
   private GameData gameData;

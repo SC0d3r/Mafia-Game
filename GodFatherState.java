@@ -1,3 +1,7 @@
+/**
+ * this class will play the role of god father in game and asks the god father
+ * if he wants to eliminate someone
+ */
 public class GodFatherState extends ServerState {
 
   public GodFatherState(Narrator narrator, GameServer server) {

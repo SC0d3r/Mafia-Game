@@ -1,5 +1,9 @@
 import java.util.ArrayList;
 
+/**
+ * a utility class to pause time and update the timer info on top of screen for
+ * users
+ */
 public class UpdateTimer {
   private int timerInSeconds;
   private ArrayList<Player> players;

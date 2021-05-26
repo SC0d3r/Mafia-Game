@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+/**
+ * this class runs when the day begins does 3 main things: 1- clears news 2-
+ * clears chat 3- updates time to 'DAY'.next state for this class is
+ * WinLostState
+ */
 public class BeginDayState extends ServerState {
   private GameData gameData;
   private SocketDataSender dataSender;

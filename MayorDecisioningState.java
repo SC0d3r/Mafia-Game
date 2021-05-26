@@ -1,5 +1,9 @@
 import java.util.HashMap;
 
+/**
+ * this class will gets called when there is a mayor in game and asks him if he
+ * wants to disable the voting
+ */
 public class MayorDecisioningState extends ServerState {
 
   private GameData gameData;

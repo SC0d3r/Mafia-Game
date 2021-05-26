@@ -1,3 +1,8 @@
+/**
+ * this class checks to see if a detective is present then asks that player if
+ * he wants to query someone and the player will respond with the user's name
+ * which he wants to know
+ */
 public class DetectiveState extends ServerState {
 
   private GameData gameData;

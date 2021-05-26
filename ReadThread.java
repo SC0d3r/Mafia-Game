@@ -6,6 +6,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * this class is the reading thread of the client part of application which
+ * reads the messages recieved from server and prints appropriate messages
+ */
 public class ReadThread extends Thread {
 
   private BufferedReader reader;

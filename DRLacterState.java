@@ -1,3 +1,8 @@
+/**
+ * this class checks to see if dr lacter is present asks him which mafia players
+ * that he wants to save from professional , Then he can type the name of the
+ * mafia player. He can only save himself once.
+ */
 public class DRLacterState extends ServerState {
   public DRLacterState(Narrator narrator, GameServer server) {
     super(narrator, server);

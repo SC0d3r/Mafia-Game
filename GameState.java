@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * this class is the main data source of the application which will be set on
+ * server side. users can update it with the messages they send from client
+ * side. server will send game state after every change to it to every client
+ */
 public class GameState implements Serializable {
   private boolean isInPsychologistState;
   private boolean isInMayorState;

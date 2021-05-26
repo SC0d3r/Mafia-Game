@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * first state of the game. will initialize the game datas and the role of
+ * players, Its next state is Intorduce mafia to each other.
+ */
 public class InitPlayersState extends ServerState {
   private SocketDataSender dataSender;
   private GameData gameData;

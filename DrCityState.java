@@ -1,3 +1,8 @@
+/**
+ * this class checks to see if a city dr is present asks him if he wants to save
+ * somebody then he can type the user's name in which he wants to save. remember
+ * that he can only save himself once
+ */
 public class DrCityState extends ServerState {
   private GameData gameData;
 

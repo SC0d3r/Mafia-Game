@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * this class is responsible for checking the commands which get created by
+ * SocketDataSender and extract their neccessary datas
+ */
 public class SocketDataReciever {
   private HashMap<String, String> headerInformation;
   private ArrayList<String> chatMessages;

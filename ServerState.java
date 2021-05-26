@@ -1,3 +1,6 @@
+/**
+ * parent state for all the states of the game
+ */
 public abstract class ServerState {
   protected Narrator narrator;
   protected GameServer gameServer;

@@ -1,5 +1,9 @@
 import java.util.ArrayList;
 
+/**
+ * this class is responsible for creating all the messages between client and
+ * server
+ */
 public class SocketDataSender {
   public static final String HEADER_INFO_BAR = "::INFO";
   public static final String CHAT_MESSAGE = "::CHAT";

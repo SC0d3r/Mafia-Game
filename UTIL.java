@@ -3,6 +3,10 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
+/**
+ * utilty class which has the main functionality to pause the game,
+ * stringify,parse the objects
+ */
 public class UTIL {
   public static final Gson gson = new Gson();
 
