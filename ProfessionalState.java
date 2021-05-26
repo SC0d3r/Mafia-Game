@@ -48,7 +48,7 @@ public class ProfessionalState extends ServerState {
       this.gameData.addNews("[+] DR.Lacter saved a mafia player!");
     } else {
       this.gameServer.killPlayer(target);
-      this.gameData.addNews(target.getUsername() + " Got killed [X_x] by professional last night.");
+      this.gameData.addNews(target.getUsername() + "[X_x] Got killed by professional last night.");
     }
 
     this.gameServer.sendPlayerStateToClients();
