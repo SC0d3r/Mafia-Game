@@ -2,23 +2,21 @@
 
 ## Server Side
 
-#
-
 ### Compile server side code
 
 > javac -cp .;gson-2.8.6.jar Main.java
+
 > javac -cp .;gson-2.8.6.jar GameServer.java
 
 ### Run server side code
 
 > java -cp .;gson-2.8.6.jar Main
+
 > java -cp .;gson-2.8.6.jar GameServer 33333
 
 <br>
 
 ## Client Side
-
-#
 
 ### Compile client side code
 
