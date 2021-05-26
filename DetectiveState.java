@@ -24,7 +24,7 @@ public class DetectiveState extends ServerState {
       if (this.gameServer.isMafia(suspectUsername) && susPlayer.getRole() != ROLE.GOD_FATHER) {
         this.gameData.addNews("Detective query: " + suspectUsername + " is a Mafia!");
       } else
-        this.gameData.addNews("Dear detective I dont know that player!");
+        this.gameData.addNews("[#] detective I dont know that player!");
     }
 
     this.gameServer.getGameState().setDetectiveSuspicionTarget("");
