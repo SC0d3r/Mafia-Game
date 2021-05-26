@@ -11,19 +11,13 @@ public class PsychologistState extends ServerState {
       return false;
     }
 
-    if (this.isTherePsychologistInGame()) {
-      this.gameServer.getGameState().setIsInPsychologistState(true);
-      this.gameServer.sendGameStateToClients();
-      UTIL.setTimerFor(10, this.gameServer.getReadyPlayers());
-      this.gameServer.getGameState().setIsInPsychologistState(false);
-      this.gameServer.sendGameStateToClients();
-    }
+    this.gameServer.getGameState().setIsInPsychologistState(true);
+    this.gameServer.sendGameStateToClients();
+    UTIL.setTimerFor(10, this.gameServer.getReadyPlayers());
+    this.gameServer.getGameState().setIsInPsychologistState(false);
+    this.gameServer.sendGameStateToClients();
     this.narrator.changeState(STATES.DIEHARD);
     return false;
-  }
-
-  private boolean isTherePsychologistInGame() {
-    return this.gameServer.getPlayerByRole(ROLE.PSYCHOLOGIST) != null;
   }
 
 }
