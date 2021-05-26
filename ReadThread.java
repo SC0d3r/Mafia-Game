@@ -162,8 +162,14 @@ public class ReadThread extends Thread {
     if (this.client.getGameState().getIsInPsychologistState() && this.client.getPlayer().getIsAlive()) {
       if (!this.client.isRole(ROLE.PSYCHOLOGIST)) {
         System.out.print("Psychologist is deciding ...");
-      } else
+      } else {
+        ArrayList<String> aliveUsersnames = this.client.getGameState().getAlivePlayerUsernames();
+        aliveUsersnames.remove(this.client.getUsername());
+
+        System.out.println("Users: " + String.join(", ", aliveUsersnames));
+        this.printSeperator();
         System.out.print("Press [Enter] to start typing ...");
+      }
       return;
     }
 
