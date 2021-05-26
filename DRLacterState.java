@@ -14,20 +14,10 @@ public class DRLacterState extends ServerState {
 
     UTIL.setTimerFor(20, this.gameServer.getReadyPlayers());
 
-    // this.checkIsDrLacterSavingHimself();
-
     this.gameServer.getGameState().setIsInDrLacterState(false);
     this.gameServer.sendGameStateToClients();
     this.narrator.changeState(STATES.DR_CITY);
     return false;
-  }
-
-  private void checkIsDrLacterSavingHimself() {
-    String drLacterUsername = this.gameServer.getPlayerByRole(ROLE.DR_LACTER).getUsername();
-    String curesUsername = this.gameServer.getGameState().getDrLacterCuresUsername();
-    if (curesUsername.equals(drLacterUsername)) {
-      this.gameServer.getGameState().setIsDrLacterSavedHimselfAllready(true);
-    }
   }
 
 }
