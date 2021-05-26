@@ -21,7 +21,7 @@ class GameServer implements Runnable {
   private Narrator ravi;
   private GameState gameState;
   private SocketDataReciever dataReciever;
-  private int MIN_NUMBER_OF_PLAYERS = 3;
+  private int MIN_NUMBER_OF_PLAYERS = 10;
 
   public GameServer(int port) {
     this.isDebugModeOn = false;
