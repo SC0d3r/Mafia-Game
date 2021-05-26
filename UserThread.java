@@ -175,8 +175,10 @@ public class UserThread extends Thread {
 
       this.socket.close();
     } catch (IOException ex) {
-      System.out.println("UserThread Error: " + ex.getMessage());
-      ex.printStackTrace();
+      if (this.gameServer.getIsDebugModeOn()) {
+        System.out.println("UserThread Error: " + ex.getMessage());
+        ex.printStackTrace();
+      }
     } finally {
       this.gameServer.killUser(this);
       // this.gameServer.removeUser(username, this);
