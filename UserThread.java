@@ -178,7 +178,8 @@ public class UserThread extends Thread {
       System.out.println("UserThread Error: " + ex.getMessage());
       ex.printStackTrace();
     } finally {
-      this.gameServer.removeUser(username, this);
+      this.gameServer.killUser(this);
+      // this.gameServer.removeUser(username, this);
       String chatCMD = this.dataSender.createChatCommand("< " + username + " left the game >");
       this.gameServer.broadcast(chatCMD, this);
       try {
@@ -186,7 +187,8 @@ public class UserThread extends Thread {
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
-      this.gameServer.waitingLobbyInfo(username);
+      if (!this.gameServer.getIsGameStarted())
+        this.gameServer.waitingLobbyInfo(username);
     }
   }
 

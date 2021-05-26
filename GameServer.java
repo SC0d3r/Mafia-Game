@@ -291,6 +291,12 @@ class GameServer {
     this.sendPlayerStateToClients();
   }
 
+  public void killUser(UserThread user) {
+    Player p = this.getPlayerByUsername(user.getUsername());
+    this.killPlayer(p);
+    this.removeUser(user.getUsername(), user);
+  }
+
   public boolean isMafia(String username) {
     Player p = this.getPlayerByUsername(username);
     return p.getRole() == ROLE.GOD_FATHER || p.getRole() == ROLE.DR_LACTER || p.getRole() == ROLE.MAFIA_MEMBER;
@@ -357,7 +363,6 @@ class GameServer {
       this.userThreads.remove(user);
       System.out.println("User [" + username + "] quit the game!");
 
-      // this.saveUsernamesToFile("usernames.txt");
       this.unregisterFromGame(username);
     }
   }
