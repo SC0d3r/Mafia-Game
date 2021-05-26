@@ -14,12 +14,22 @@ public class GameData {
   private static GameData instance;
   private volatile DAYTIME daytime;
   private ArrayList<String> news;
+  private boolean didMafiaWin;
   private boolean isVotingGotCanceled;
 
   private GameData() {
     this.daytime = DAYTIME.NIGHT;
     this.news = new ArrayList<>();
     this.isVotingGotCanceled = false;
+    this.didMafiaWin = false;
+  }
+
+  public void setDidMafiaWin(boolean status) {
+    this.didMafiaWin = status;
+  }
+
+  public boolean getDidMafiaWin() {
+    return this.didMafiaWin;
   }
 
   public void setIsVotingGotCanceled(boolean state) {
