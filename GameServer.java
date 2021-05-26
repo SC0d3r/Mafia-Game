@@ -365,7 +365,7 @@ class GameServer {
     }
     int port = Integer.parseInt(args[0]);
 
-    int minNumberOfPlayers = 5;
+    int minNumberOfPlayers = 3;
     try {
       minNumberOfPlayers = Integer.parseInt(args[1]);
 
