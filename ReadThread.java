@@ -129,8 +129,9 @@ public class ReadThread extends Thread {
       if (!this.client.isRole(ROLE.DR_CITY)) {
         System.out.print("DR City is deciding ...");
       } else {
-        ArrayList<String> aliveCitizen = this.client.getGameState().getAliveCitizenUsernames();
-        System.out.println("Citizen : " + String.join(", ", aliveCitizen));
+        ArrayList<String> aliveUsernames = this.client.getGameState().getAlivePlayerUsernames();
+        aliveUsernames.remove(this.client.getUsername());
+        System.out.println("Players : " + String.join(", ", aliveUsernames));
         this.printSeperator();
         System.out.print("Press Enter to select your target ...");
       }
