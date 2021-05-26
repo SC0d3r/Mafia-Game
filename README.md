@@ -14,13 +14,9 @@
 
 > java -cp .;gson-2.8.6.jar Main
 
-<br>
-
 #### Bellow command will lauch only `1` server on port `3333` that clients can connect.
 
 > java -cp .;gson-2.8.6.jar GameServer 33333
-
-<br>
 
 ## Client Side
 
