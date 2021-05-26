@@ -197,8 +197,11 @@ public class ReadThread extends Thread {
       this.printSeperator();
       System.out.print(this.client.getUsername() + ": ");
     } else {
-      GameServer.clrscr();
-      System.out.print("Enter username: ");
+      // bellow if is for the issue of printing 2 times when new user connects to
+      // server
+      if (this.client.getGameState().getIsThereAnyUserOnline())
+        GameServer.clrscr();
+      System.out.printf("\nEnter username: ");
     }
   }
 

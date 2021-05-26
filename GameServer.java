@@ -178,6 +178,9 @@ class GameServer {
         // these 3 lines are for if a user joins after another user doesnt take the
         // already taken usernames
         GameState newState = new GameState();
+        newState.setIsThereAnyUserOnline(this.gameState.getIsThereAnyUserOnline());
+        this.gameState.setIsThereAnyUserOnline(true);
+
         newState.setUsernames(this.gameState.getUsernames());
         newUser.sendMessage(this.dataSender.createGameState(newState));
 
