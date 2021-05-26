@@ -4,6 +4,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WriteThread extends Thread {
   private PrintWriter wirter;
@@ -11,7 +13,6 @@ public class WriteThread extends Thread {
   private GameClient client;
   private SocketDataReciever socketData;
   private SocketDataSender dataSender;
-  private boolean ableToChat;
 
   public WriteThread(Socket socket, GameClient client, SocketDataReciever socketData) {
     this.socket = socket;
@@ -60,8 +61,8 @@ public class WriteThread extends Thread {
     while (!isUserAdded) {
       username = console.readLine("\nEnter Username: ");
 
-      if (this.client.doesUsernameExists(username)) {
-        System.out.println("This user name already exists!");
+      if (!this.isUsernameValid(username)) {
+        System.out.println("Valid username must start with text and can have numbers.");
         continue;
       }
 
@@ -70,6 +71,13 @@ public class WriteThread extends Thread {
       isUserAdded = true;
     }
     return username;
+  }
+
+  private boolean isUsernameValid(String username) {
+    Pattern pattern = Pattern.compile("^[a-zA-Z]+[0-9]*[a-zA-Z]*$", Pattern.CASE_INSENSITIVE);
+    Matcher matcher = pattern.matcher(username);
+    boolean didMatch = matcher.find();
+    return didMatch;
   }
 
   private void closeSocket() {
