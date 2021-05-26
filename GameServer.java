@@ -20,7 +20,7 @@ class GameServer {
   private Narrator ravi;
   private GameState gameState;
   private SocketDataReciever dataReciever;
-  private static final int MIN_NUMBER_OF_PLAYERS = 3;
+  private static final int MIN_NUMBER_OF_PLAYERS = 5;
 
   public GameServer(int port) {
     this.port = port;
