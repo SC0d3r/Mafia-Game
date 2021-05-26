@@ -10,7 +10,6 @@ public class DrCityState extends ServerState {
   public boolean run() {
     String godFatherTarget = this.gameServer.getGameState().getGodFatherTargetUsername();
     this.gameServer.getGameState().setGodFatherTargetUsername(""); // reseting
-    System.out.println("GOD FATHER TARGET: " + godFatherTarget);
     Player target = this.gameServer.getPlayerByUsername(godFatherTarget);
     if (!this.gameServer.isPlayerInGame(ROLE.DR_CITY)) {
       if (target != null) {// if god father chose someone
