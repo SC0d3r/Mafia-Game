@@ -166,7 +166,11 @@ class GameServer implements Runnable {
     try (ServerSocket serverSocket = new ServerSocket(this.port)) {
       System.out.println("Chat Server Listening On [PORT]: " + this.port);
       while (true) {
+        if (this.isGameStarted)
+          break;
         Socket socket = serverSocket.accept();
+        if (this.isGameStarted)
+          break;
         System.out.println("New User Connected!");
 
         UserThread newUser = new UserThread(socket, this, this.dataReciever);
