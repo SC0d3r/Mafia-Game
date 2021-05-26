@@ -13,6 +13,7 @@ import java.util.Set;
 class GameServer {
   private int port;
   private volatile Set<String> usernames;
+  private boolean isDebugModeOn;
   private volatile Set<UserThread> userThreads;
   private boolean isGameStarted;
   private SocketDataSender dataSender;
@@ -20,9 +21,10 @@ class GameServer {
   private Narrator ravi;
   private GameState gameState;
   private SocketDataReciever dataReciever;
-  private static final int MIN_NUMBER_OF_PLAYERS = 5;
+  private int MIN_NUMBER_OF_PLAYERS = 5;
 
   public GameServer(int port) {
+    this.isDebugModeOn = false;
     this.port = port;
     this.usernames = new HashSet<>();
     this.userThreads = new HashSet<>();
@@ -32,6 +34,14 @@ class GameServer {
     this.gameState = new GameState();
     this.ravi = new Narrator(this, GameData.getInstance());
     this.dataReciever = new SocketDataReciever();
+  }
+
+  public void setDebugMode(boolean status) {
+    this.isDebugModeOn = status;
+  }
+
+  public boolean getIsDebugModeOn() {
+    return this.isDebugModeOn;
   }
 
   public GameState getGameState() {
@@ -165,8 +175,10 @@ class GameServer {
 
       }
     } catch (IOException ex) {
-      System.out.println("Server Error: " + ex.getMessage());
-      ex.printStackTrace();
+      if (this.isDebugModeOn) {
+        System.out.println("Server Error: " + ex.getMessage());
+        ex.printStackTrace();
+      }
     }
   }
 
@@ -193,7 +205,7 @@ class GameServer {
       e.printStackTrace();
     }
     String watingFor = this.dataSender.createInfo("Waiting",
-        (GameServer.MIN_NUMBER_OF_PLAYERS - this.getReadyPlayers().size()) + "");
+        (this.MIN_NUMBER_OF_PLAYERS - this.getReadyPlayers().size()) + "");
     String isReady = this.dataSender.createInfo("Ready", "YES");
     String notReady = this.dataSender.createInfo("Ready", "NO ,Type '!ready'");
     for (UserThread user : this.userThreads) {
@@ -243,7 +255,7 @@ class GameServer {
         return;
     }
 
-    System.out.println("User [" + username + "] is realy ***** ready for the game.");
+    System.out.println("User [" + username + "] is ready for the game.");
     this.readyPlayers.add(new Player(username, ROLE.CITIZEN, user));
   }
 
@@ -293,8 +305,11 @@ class GameServer {
 
   public void killUser(UserThread user) {
     Player p = this.getPlayerByUsername(user.getUsername());
-    this.killPlayer(p);
-    this.removeUser(user.getUsername(), user);
+    if (p != null) { // p is null when game is not yet started
+      System.out.println(ROLE.toString(p.getRole()) + " left the game");
+      this.killPlayer(p);
+    }
+    this.removeUser(p, user);
   }
 
   public boolean isMafia(String username) {
@@ -302,17 +317,8 @@ class GameServer {
     return p.getRole() == ROLE.GOD_FATHER || p.getRole() == ROLE.DR_LACTER || p.getRole() == ROLE.MAFIA_MEMBER;
   }
 
-  public void unregisterFromGame(String username) {
-    System.out.println("User [" + username + "] unregistered from game.");
-
-    // removing the player from list
-    ArrayList<Player> result = new ArrayList<>();
-    for (Player p : this.readyPlayers) {
-      if (p.getUsername().equals(username))
-        continue;
-      result.add(p);
-    }
-    this.readyPlayers = result;
+  public void unregisterFromGame(Player p) {
+    this.readyPlayers.remove(p);
   }
 
   public boolean canBeginTheGame() {
@@ -320,7 +326,7 @@ class GameServer {
     // System.out.println(this.readyPlayers.size());
     if (this.isGameStarted)
       return false;
-    if (this.readyPlayers.size() >= GameServer.MIN_NUMBER_OF_PLAYERS)
+    if (this.readyPlayers.size() >= this.MIN_NUMBER_OF_PLAYERS)
       // if (this.a >= GameServer.MIN_NUMBER_OF_PLAYERS)
       return true;
     return false;
@@ -329,11 +335,27 @@ class GameServer {
   public static void main(String[] args) {
     System.out.println("\n::Welcome to Mafia game::\n");
     if (args.length < 1) {
-      System.out.println("Syntax : >java GameServer <port-number>");
+      System.out.println("Syntax : >java GameServer <port-number> <# of players> <debug-mode>");
       System.exit(0);
     }
     int port = Integer.parseInt(args[0]);
+
+    int minNumberOfPlayers = 5;
+    try {
+      minNumberOfPlayers = Integer.parseInt(args[1]);
+
+    } catch (Exception ex) {
+    }
+
+    boolean shouldDebug = false;
+    try {
+      shouldDebug = Boolean.valueOf(args[2]);
+    } catch (Exception ex) {
+    }
+
     GameServer gameServer = new GameServer(port);
+    gameServer.MIN_NUMBER_OF_PLAYERS = minNumberOfPlayers;
+    gameServer.setDebugMode(shouldDebug);
     gameServer.execute();
 
   }
@@ -357,14 +379,11 @@ class GameServer {
     return true;
   }
 
-  public void removeUser(String username, UserThread user) {
-    boolean removed = this.usernames.remove(username);
-    if (removed) {
-      this.userThreads.remove(user);
-      System.out.println("User [" + username + "] quit the game!");
-
-      this.unregisterFromGame(username);
-    }
+  public void removeUser(Player p, UserThread user) {
+    this.usernames.remove(user.getUsername());
+    this.userThreads.remove(user);
+    if (p != null)
+      this.unregisterFromGame(p);
   }
 
   public boolean hasUsers() {
