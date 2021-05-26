@@ -241,6 +241,10 @@ public class ReadThread extends Thread {
       this.client.setGameState(newGameState);
     }
 
+    if (this.socketData.isClearNewsCommand(response)) {
+      this.socketData.clearNews();
+    }
+
     if (this.socketData.isGameBeginCommand(response)) {
       this.socketData.clearChatMessages();
       this.socketData.clearHeader();

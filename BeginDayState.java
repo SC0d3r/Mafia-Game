@@ -15,6 +15,7 @@ public class BeginDayState extends ServerState {
     // this is for clearing the welcome and introduction of mafia and dr to mayor
     // etc...
     this.narrator.broadcast(SocketDataSender.SAVE_AND_CLEAR_CHAT, this.gameServer.getReadyPlayers());
+    this.narrator.broadcast(SocketDataSender.CLEAR_NEWS, this.gameServer.getReadyPlayers());
 
     this.gameData.updateDayTime(DAYTIME.DAY);
     String timeOfDay = this.dataSender.createInfo("TIME", DAYTIME.toString(this.gameData.getDayTime()));
@@ -29,8 +30,8 @@ public class BeginDayState extends ServerState {
     if (!this.gameData.isThereAnyNews())
       return;
     ArrayList<String> news = this.gameData.getNews();
-    this.narrator.broadcast(this.dataSender.createNews(news), this.gameServer.getReadyPlayers());
     this.clearNews();
+    this.narrator.broadcast(this.dataSender.createNews(news), this.gameServer.getReadyPlayers());
   }
 
   private void clearNews() {

@@ -251,6 +251,10 @@ public class SocketDataReciever {
     return maybeInfo.contains(SocketDataSender.HEADER_INFO_BAR);
   }
 
+  public boolean isClearNewsCommand(String response) {
+    return response.equals(SocketDataSender.CLEAR_NEWS);
+  }
+
   public boolean isChatMessage(String maybeChatMessage) {
     return maybeChatMessage.contains(SocketDataSender.CHAT_MESSAGE);
   }
