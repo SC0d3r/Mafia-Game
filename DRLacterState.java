@@ -6,7 +6,7 @@ public class DRLacterState extends ServerState {
   @Override
   public boolean run() {
     if (!this.gameServer.isPlayerInGame(ROLE.DR_LACTER)) {
-      this.narrator.changeState(STATES.MAYOR_DECISIONING);
+      this.narrator.changeState(STATES.DR_CITY);
       return false;
     }
     this.gameServer.getGameState().setIsInDrLacterState(true);
