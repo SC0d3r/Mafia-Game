@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
-
 public class EnableChatState extends ServerState {
 
   public EnableChatState(Narrator narrator, GameServer server) {

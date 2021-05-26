@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-
 public class UpdateTimer {
   private int timerInSeconds;
   private ArrayList<Player> players;

@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class WinLoseCheckState extends ServerState {
 
   public WinLoseCheckState(Narrator narrator, GameServer server) {

@@ -71,7 +71,7 @@ public class GameClient {
       SocketDataReciever socketData = new SocketDataReciever();
       new ReadThread(socket, this, socketData).start();
       UTIL.sleep(10);
-      new WriteThread(socket, this, socketData).start();
+      new WriteThread(socket, this).start();
 
     } catch (UnknownHostException ex) {
       System.out.println("Server not found: " + ex.getMessage());
