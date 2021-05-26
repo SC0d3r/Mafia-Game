@@ -18,22 +18,30 @@ public class UpdateTimer {
 
   // @Override
   public void run() {
+    this.sendToClients();
+
     while (true) {
       if (this.isFinished()) {
         for (Player p : this.players) {
           String removeInfo = this.dataSender.createRemoveInfo("Remaining");
           p.sendMessage(removeInfo);
-          // this.wait(10);
         }
         return;
       }
 
-      for (Player p : this.players) {
-        String remainingSeconds = this.dataSender.createInfo("Remaining", this.timerInSeconds + "s");
-        p.sendMessage(remainingSeconds);
+      if (this.timerInSeconds % 10 == 0) {
+        this.sendToClients();
       }
-      this.wait(10000);
-      this.timerInSeconds -= 10;
+
+      this.wait(1000);
+      this.timerInSeconds -= 1;
+    }
+  }
+
+  private void sendToClients() {
+    for (Player p : this.players) {
+      String remainingSeconds = this.dataSender.createInfo("Remaining", this.timerInSeconds + "s");
+      p.sendMessage(remainingSeconds);
     }
   }
 
