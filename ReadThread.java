@@ -55,6 +55,12 @@ public class ReadThread extends Thread {
   }
 
   private void printPromptText() {
+    if (this.client.getGameState().getIsGameFinished()) {
+      this.printSeperator();
+      System.out.println(this.client.getUsername() + ": ");
+      return;
+    }
+
     if (!this.client.getPlayer().getIsAlive()) {
       this.printSeperator();
       System.out.print("[X_X] You are dead.");
@@ -181,7 +187,8 @@ public class ReadThread extends Thread {
       return;
     }
 
-    if (!this.client.getPlayer().getCanChat() && this.client.getPlayer().getIsAlive()) {
+    if (!this.client.getGameState().getIsGameFinished() && !this.client.getPlayer().getCanChat()
+        && this.client.getPlayer().getIsAlive()) {
       System.out.print("<.. zzZZZzz ..>");
       return;
     }
@@ -229,7 +236,8 @@ public class ReadThread extends Thread {
 
     this.socketData.addNews(response);
 
-    if (this.client.getCanChat() || this.client.getGameState().getIsInMafiaGatheringState()) {
+    if (this.client.getGameState().getIsGameFinished() || this.client.getCanChat()
+        || this.client.getGameState().getIsInMafiaGatheringState()) {
       this.socketData.addChatMessage(response);
       this.socketData.addChatCommand(response);
     }

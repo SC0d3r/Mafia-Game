@@ -11,6 +11,7 @@ public class WriteThread extends Thread {
   private GameClient client;
   private SocketDataReciever socketData;
   private SocketDataSender dataSender;
+  private boolean ableToChat;
 
   public WriteThread(Socket socket, GameClient client, SocketDataReciever socketData) {
     this.socket = socket;
@@ -286,8 +287,9 @@ public class WriteThread extends Thread {
         return text;
     }
 
-    if (this.client.getPlayer().getCanChat() && !this.client.getPlayer().getIsSilenced()
-        && this.client.getPlayer().getIsAlive()) {
+    boolean ableToChat = this.client.getPlayer().getCanChat() && !this.client.getPlayer().getIsSilenced()
+        && this.client.getPlayer().getIsAlive();
+    if (this.client.getGameState().getIsGameFinished() || ableToChat) {
       text = console.readLine(username + ": ").trim();
       if (text.isBlank())
         return text;

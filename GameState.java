@@ -22,12 +22,14 @@ public class GameState implements Serializable {
   private String drCitySaveTarget;
   private boolean isInIntroductionState;
   private boolean isDrCitySavedHimselfAllready;
+  private boolean isGameFinished;
   private ArrayList<String> alivePlayerUsernames;
   private ArrayList<String> aliveMafiaUsernames;
   private ArrayList<String> aliveCitizenUsernames;
   private volatile HashMap<String, String> votes;
 
   public GameState() {
+    this.isGameFinished = false;
     this.isInPsychologistState = false;
     this.isInProfessionalState = false;
     this.isInDetectiveState = false;
@@ -52,6 +54,14 @@ public class GameState implements Serializable {
     this.alivePlayerUsernames = new ArrayList<>();
     this.aliveMafiaUsernames = new ArrayList<>();
     this.aliveCitizenUsernames = new ArrayList<>();
+  }
+
+  public void setIsGameFinished(boolean status) {
+    this.isGameFinished = status;
+  }
+
+  public boolean getIsGameFinished() {
+    return this.isGameFinished;
   }
 
   public boolean getIsInDrCityState() {
