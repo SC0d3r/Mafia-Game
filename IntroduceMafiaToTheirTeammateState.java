@@ -14,7 +14,7 @@ public class IntroduceMafiaToTheirTeammateState extends ServerState {
     ArrayList<Player> mafias = this.getMafias();
     ArrayList<String> messages = this.createIntroductionMessages(mafias);
     this.narrator.broadcast(this.dataSender.createChatCommand(String.join(", ", messages)), mafias);
-    UTIL.sleep(2000);
+    UTIL.setTimerFor(2, this.gameServer.getReadyPlayers());
     this.narrator.changeState(STATES.INTRODUCE_DR_TO_MAYOR);
     return false;
   }
