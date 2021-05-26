@@ -6,6 +6,11 @@ public class MafiaGatheringState extends ServerState {
 
   @Override
   public boolean run() {
+    if (this.gameServer.getAliveMafiaUsernames().size() < 2) {
+      this.narrator.changeState(STATES.GOD_FATHER);
+      return false;
+    }
+
     this.gameServer.getGameState().setIsInMafiaGatheringState(true);
     this.gameServer.sendGameStateToClients();
 

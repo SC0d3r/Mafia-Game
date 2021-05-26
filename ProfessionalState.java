@@ -10,7 +10,7 @@ public class ProfessionalState extends ServerState {
   @Override
   public boolean run() {
     if (!this.gameServer.isPlayerInGame(ROLE.PROFESSIONAL)) {
-      this.narrator.changeState(STATES.DETECTIVE);
+      this.narrator.changeState(STATES.PSYCHOLOGIST);
       return false;
     }
 

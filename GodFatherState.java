@@ -6,6 +6,11 @@ public class GodFatherState extends ServerState {
 
   @Override
   public boolean run() {
+    if (!this.gameServer.isPlayerInGame(ROLE.GOD_FATHER)) {
+      this.narrator.changeState(STATES.DR_LACTER);
+      return false;
+    }
+
     this.gameServer.getGameState().setIsInGodFatherState(true);
     this.gameServer.sendGameStateToClients();
 

@@ -10,7 +10,7 @@ public class DetectiveState extends ServerState {
   @Override
   public boolean run() {
     if (!this.gameServer.isPlayerInGame(ROLE.DETECTIVE)) {
-      this.narrator.changeState(STATES.DIEHARD);
+      this.narrator.changeState(STATES.PROFESSIONAL);
       return false;
     }
 
