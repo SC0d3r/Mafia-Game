@@ -8,12 +8,22 @@ public class GameClient {
   private String username;
   private Player player;
   private GameState gameState;
+  private boolean isDebugModeOn;
 
   public GameClient(String hostname, int port) {
+    this.isDebugModeOn = false;
     this.port = port;
     this.hostname = hostname;
     this.gameState = new GameState();
     this.player = new Player("Anonymouse", ROLE.CITIZEN, null);
+  }
+
+  public boolean getIsDebugModeOn() {
+    return this.isDebugModeOn;
+  }
+
+  public void setDebugMode(boolean status) {
+    this.isDebugModeOn = status;
   }
 
   public Player getPlayer() {
@@ -80,13 +90,19 @@ public class GameClient {
 
   public static void main(String[] args) {
     if (args.length < 2) {
-      System.out.println("Syntax : >java GameClient <host-name> <port-number>");
+      System.out.println("Syntax : >java GameClient <host-name> <port-number> <debug-mode>");
       System.exit(0);
     }
     String hostname = args[0];
     int port = Integer.parseInt(args[1]);
 
     GameClient gameClient = new GameClient(hostname, port);
+    boolean debug = false;
+    try {
+      debug = Boolean.valueOf(args[2]);
+    } catch (Exception ex) {
+    }
+    gameClient.setDebugMode(debug);
     gameClient.execute();
   }
 

@@ -22,8 +22,10 @@ public class ReadThread extends Thread {
       InputStream input = socket.getInputStream();
       this.reader = new BufferedReader(new InputStreamReader(input));
     } catch (IOException ex) {
-      System.out.println("Error on getting input stream: " + ex.getMessage());
-      ex.printStackTrace();
+      if (this.client.getIsDebugModeOn()) {
+        System.out.println("Error on getting input stream: " + ex.getMessage());
+        ex.printStackTrace();
+      }
     }
   }
 
@@ -43,8 +45,10 @@ public class ReadThread extends Thread {
         this.printPromptText();
 
       } catch (IOException ex) {
-        System.out.println("Error on reading from server: " + ex.getMessage());
-        ex.printStackTrace();
+        if (this.client.getIsDebugModeOn()) {
+          System.out.println("Error on reading from server: " + ex.getMessage());
+          ex.printStackTrace();
+        }
         break;
       }
     }

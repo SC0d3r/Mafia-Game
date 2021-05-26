@@ -25,8 +25,10 @@ public class WriteThread extends Thread {
       OutputStream output = socket.getOutputStream();
       this.wirter = new PrintWriter(output, true);
     } catch (IOException ex) {
-      System.out.println("Error on getting output stream: " + ex.getMessage());
-      ex.printStackTrace();
+      if (this.client.getIsDebugModeOn()) {
+        System.out.println("Error on getting output stream: " + ex.getMessage());
+        ex.printStackTrace();
+      }
     }
   }
 
@@ -90,8 +92,9 @@ public class WriteThread extends Thread {
     try {
       this.socket.close();
     } catch (IOException ex) {
-      System.out.println("Error on writinerver: " + ex.getMessage());
-
+      if (this.client.getIsDebugModeOn()) {
+        System.out.println("Error on writinerver: " + ex.getMessage());
+      }
     }
   }
 
