@@ -19,7 +19,7 @@ public class IntroduceDrToMayorState extends ServerState {
       mayor.sendMessage(messageForMayor);
     }
 
-    UTIL.sleepMSM(0, 3, 0);
+    UTIL.setTimerFor(3, this.gameServer.getReadyPlayers());
 
     // introduction finishes
     this.gameServer.getGameState().setIsInIntroductionState(false);

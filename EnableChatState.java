@@ -10,7 +10,7 @@ public class EnableChatState extends ServerState {
       p.setCanChat(true);
     }
     this.gameServer.sendPlayerStateToClients();
-    UTIL.setTimerFor(10, this.gameServer.getReadyPlayers());
+    UTIL.setTimerFor(30, this.gameServer.getReadyPlayers());
     this.saveAndClearChatMessages();
     this.narrator.changeState(STATES.END_OF_DAY_VOTING);
     return false;
