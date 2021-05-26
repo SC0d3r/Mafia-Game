@@ -134,7 +134,6 @@ public class ReadThread extends Thread {
         System.out.print("DR City is deciding ...");
       } else {
         ArrayList<String> aliveUsernames = this.client.getGameState().getAlivePlayerUsernames();
-        aliveUsernames.remove(this.client.getUsername());
         System.out.println("Players : " + String.join(", ", aliveUsernames));
         this.printSeperator();
         System.out.print("Press Enter to select your target ...");

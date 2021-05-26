@@ -11,13 +11,11 @@ public class WriteThread extends Thread {
   private PrintWriter wirter;
   private Socket socket;
   private GameClient client;
-  private SocketDataReciever socketData;
   private SocketDataSender dataSender;
 
-  public WriteThread(Socket socket, GameClient client, SocketDataReciever socketData) {
+  public WriteThread(Socket socket, GameClient client) {
     this.socket = socket;
     this.client = client;
-    this.socketData = socketData;
     this.dataSender = new SocketDataSender();
 
     try {
@@ -202,11 +200,11 @@ public class WriteThread extends Thread {
       if (this.client.isRole(ROLE.DR_CITY)) {
         while (this.client.getGameState().getIsInDrCityState() && this.client.getPlayer().getIsAlive()) {
           text = console.readLine("[+] Who do you want to save? ").trim();
-          ArrayList<String> aliveCitizen = this.client.getGameState().getAliveCitizenUsernames();
+          ArrayList<String> aliveUsernames = this.client.getGameState().getAlivePlayerUsernames();
           if (this.client.getGameState().getIsDrCitySavedHimselfAllready()) {
-            aliveCitizen.remove(this.client.getUsername());
+            aliveUsernames.remove(this.client.getUsername());
           }
-          if (aliveCitizen.contains(text) || !this.client.getGameState().getIsInDrCityState())
+          if (aliveUsernames.contains(text) || !this.client.getGameState().getIsInDrCityState())
             break;
         }
         if (this.client.getGameState().getIsInDrCityState() && this.client.getPlayer().getIsAlive()) {
