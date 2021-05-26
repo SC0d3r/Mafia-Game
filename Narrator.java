@@ -27,8 +27,8 @@ public class Narrator implements Runnable {
     this.states.put(STATES.INTRODUCE_DR_TO_MAYOR, new IntroduceDrToMayorState(this, this.server, this.dataSender));
     this.states.put(STATES.BEGIN_DAY, new BeginDayState(this, this.server, this.gameData, this.dataSender));
     this.states.put(STATES.WIN_LOST_CHECK, new WinLoseCheckState(this, this.server));
-    this.states.put(STATES.MAFIA_WINNER, new MafiaWinnerState(this, this.server, this.dataSender));
-    this.states.put(STATES.CITIZEN_WINNER, new CitizenWinnerState(this, this.server, this.dataSender));
+    this.states.put(STATES.MAFIA_WINNER, new MafiaWinnerState(this, this.server, this.dataSender, this.gameData));
+    this.states.put(STATES.CITIZEN_WINNER, new CitizenWinnerState(this, this.server, this.dataSender, this.gameData));
     this.states.put(STATES.ENABLE_CHAT, new EnableChatState(this, this.server));
     this.states.put(STATES.END_OF_DAY_VOTING, new EndOfDayVotingState(this, this.server));
     this.states.put(STATES.DISABLE_CHAT, new DisableChatState(this, this.server));
@@ -73,7 +73,19 @@ public class Narrator implements Runnable {
       if (isFinished)
         break;
     }
-    this.broadcast("GAME IS FINISHED", this.server.getReadyPlayers());
+    this.broadcast(SocketDataSender.CLEAR_NEWS, this.server.getReadyPlayers());
+    this.broadcast(SocketDataSender.SAVE_AND_CLEAR_CHAT, this.server.getReadyPlayers());
+    this.broadcast(this.dataSender.createRemoveInfo("ROLE"), this.server.getReadyPlayers());
+    this.broadcast(this.dataSender.createRemoveInfo("TIME"), this.server.getReadyPlayers());
+    this.broadcast(this.dataSender.createRemoveInfo("Alive"), this.server.getReadyPlayers());
+    this.broadcast(
+        this.dataSender.createChatCommand(
+            "GAME IS FINISHED | " + (this.gameData.getDidMafiaWin() ? "Mafia" : "Citizen") + " won the game."),
+        this.server.getReadyPlayers());
+    this.broadcast(this.dataSender.createChatCommand("Thanks for playing. Type 'exit' to quit the game."),
+        this.server.getReadyPlayers());
+
+    this.broadcast(this.dataSender.createChatCommand(" "), this.server.getReadyPlayers());
   }
 
 }
