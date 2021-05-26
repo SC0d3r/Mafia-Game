@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-class GameServer {
+class GameServer implements Runnable {
   private int port;
   private volatile Set<String> usernames;
   private boolean isDebugModeOn;
@@ -21,7 +21,7 @@ class GameServer {
   private Narrator ravi;
   private GameState gameState;
   private SocketDataReciever dataReciever;
-  private int MIN_NUMBER_OF_PLAYERS = 5;
+  private int MIN_NUMBER_OF_PLAYERS = 3;
 
   public GameServer(int port) {
     this.isDebugModeOn = false;
@@ -161,7 +161,8 @@ class GameServer {
     return biggestKey;
   }
 
-  public void execute() {
+  @Override
+  public void run() {
     try (ServerSocket serverSocket = new ServerSocket(this.port)) {
       System.out.println("Chat Server Listening On [PORT]: " + this.port);
       while (true) {
@@ -381,7 +382,7 @@ class GameServer {
     GameServer gameServer = new GameServer(port);
     gameServer.MIN_NUMBER_OF_PLAYERS = minNumberOfPlayers;
     gameServer.setDebugMode(shouldDebug);
-    gameServer.execute();
+    gameServer.run();
 
   }
 
@@ -440,4 +441,5 @@ class GameServer {
       ex.printStackTrace();
     }
   }
+
 }
