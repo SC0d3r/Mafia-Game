@@ -58,8 +58,8 @@ public class InitPlayersState extends ServerState {
 
   private ArrayList<ROLE> createRoles() {
     int howManyPlayers = this.gameServer.getReadyPlayers().size();
-    ROLE[] allRoles = { ROLE.PROFESSIONAL, ROLE.GOD_FATHER, ROLE.DR_LACTER, ROLE.PSYCHOLOGIST, ROLE.DR_CITY, ROLE.MAYOR,
-        ROLE.DIE_HARD, ROLE.DETECTIVE, ROLE.CITIZEN, ROLE.MAFIA_MEMBER };
+    ROLE[] allRoles = { ROLE.GOD_FATHER, ROLE.DR_CITY, ROLE.DETECTIVE, ROLE.DR_LACTER, ROLE.PROFESSIONAL, ROLE.MAYOR,
+        ROLE.DIE_HARD, ROLE.PSYCHOLOGIST, ROLE.CITIZEN, ROLE.MAFIA_MEMBER };
 
     ArrayList<ROLE> result = new ArrayList<>();
     for (int i = 0; i < howManyPlayers; i++) {
