@@ -41,4 +41,8 @@ public class UTIL {
   public static void setTimerFor(int seconds, ArrayList<Player> players) {
     new UpdateTimer(seconds, players).run();
   }
+
+  public static void setTimerFor(int seconds, ArrayList<Player> players, GameState gameState) {
+    new UpdateTimer(seconds, players, gameState).run();
+  }
 }

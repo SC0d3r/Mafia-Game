@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+
 public class EnableChatState extends ServerState {
 
   public EnableChatState(Narrator narrator, GameServer server) {
@@ -10,7 +13,17 @@ public class EnableChatState extends ServerState {
       p.setCanChat(true);
     }
     this.gameServer.sendPlayerStateToClients();
-    UTIL.setTimerFor(30, this.gameServer.getReadyPlayers());
+
+    // bellow line will be used in uptateTimer to see if all players who can chat
+    // typed !ready or not to begin voting early
+    this.gameServer.getGameState().setUsernamesWhoChat(this.gameServer.getWhoCanChat());
+
+    int fiveMinutes = 60 * 5;
+    UTIL.setTimerFor(fiveMinutes, this.gameServer.getReadyPlayers(), this.gameServer.getGameState());
+
+    this.gameServer.getGameState().clearReadyPlayersToBeginVoting();
+    this.gameServer.sendGameStateToClients();
+
     this.saveAndClearChatMessages();
     this.narrator.changeState(STATES.END_OF_DAY_VOTING);
     return false;

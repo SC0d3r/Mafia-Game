@@ -1,15 +1,25 @@
 import java.util.ArrayList;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+
 public class UpdateTimer {
   private int timerInSeconds;
   private ArrayList<Player> players;
   private SocketDataSender dataSender;
+  private GameState gameState;
 
   public UpdateTimer(int timerInSeconds, ArrayList<Player> players) {
     // super();
     this.timerInSeconds = timerInSeconds;
     this.players = players;
     this.dataSender = new SocketDataSender();
+  }
+
+  public UpdateTimer(int timerInSeconds, ArrayList<Player> players, GameState gameState) {
+    this.timerInSeconds = timerInSeconds;
+    this.players = players;
+    this.dataSender = new SocketDataSender();
+    this.gameState = gameState;
   }
 
   public boolean isFinished() {
@@ -20,8 +30,16 @@ public class UpdateTimer {
   public void run() {
     this.sendToClients();
 
+    boolean areAllPlayersReadyToVote = false;
     while (true) {
-      if (this.isFinished()) {
+
+      if (this.gameState != null) {
+        areAllPlayersReadyToVote = this.gameState.getReadyPlayersToBeginVoting().size() == this.gameState
+            .getUsernamesWhoCanChat().size();
+      }
+
+      if (this.isFinished() || areAllPlayersReadyToVote) {
+
         for (Player p : this.players) {
           String removeInfo = this.dataSender.createRemoveInfo("Remaining");
           p.sendMessage(removeInfo);

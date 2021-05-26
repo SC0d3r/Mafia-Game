@@ -311,7 +311,17 @@ class GameServer {
     this.getGameState().setAlivePlayerUsernames(aliveUsernames);
     this.getGameState().setAliveMafiaUsernames(aliveMafiaUsernames);
     this.getGameState().setAliveCitizenUsernames(aliveCitizenUsernamese);
+    this.gameState.setUsernamesWhoChat(this.getWhoCanChat());
     this.sendPlayerStateToClients();
+  }
+
+  public ArrayList<String> getWhoCanChat() {
+    ArrayList<String> result = new ArrayList<>();
+    for (Player p : this.getReadyPlayers()) {
+      if (p.getCanChat() && p.getIsAlive() && !p.getIsSilenced())
+        result.add(p.getUsername());
+    }
+    return result;
   }
 
   public void killUser(UserThread user) {

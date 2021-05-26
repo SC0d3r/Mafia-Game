@@ -147,6 +147,16 @@ public class UserThread extends Thread {
           continue;
         }
 
+        if (this.gameServer.getIsGameStarted() && clientMessage.equals("!ready")) {
+          this.gameServer.getGameState().addToReadyPlayersToBeginVoting(this.username);
+          int currentReadyPlayers = this.gameServer.getGameState().getReadyPlayersToBeginVoting().size();
+          int total = this.gameServer.getGameState().getUsernamesWhoCanChat().size();
+
+          String message = "[" + currentReadyPlayers + "\\" + total + "] " + this.username + " is ready for voting.";
+          this.gameServer.broadcast(this.dataSender.createChatCommand(message), null);
+          continue;
+        }
+
         if (!this.gameServer.getIsGameStarted() && clientMessage.equals("!ready")) {
           this.gameServer.registerForGame(username, this);
           this.sleep(10);

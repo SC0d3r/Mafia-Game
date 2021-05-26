@@ -1,6 +1,8 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GameState implements Serializable {
   private boolean isInPsychologistState;
@@ -29,8 +31,12 @@ public class GameState implements Serializable {
   private ArrayList<String> aliveCitizenUsernames;
   private volatile HashMap<String, String> votes;
   private boolean isThereAnyUserOnline;
+  private Set<String> readyPlayersToBeginVoting;
+  private ArrayList<String> usernamesWhoCanChat;
 
   public GameState() {
+    this.usernamesWhoCanChat = new ArrayList<>();
+    this.readyPlayersToBeginVoting = new HashSet<>();
     this.usernames = new ArrayList<>();// this field is for make sure that usernames in game is unique
     this.isThereAnyUserOnline = false;
     this.isGameFinished = false;
@@ -58,6 +64,26 @@ public class GameState implements Serializable {
     this.alivePlayerUsernames = new ArrayList<>();
     this.aliveMafiaUsernames = new ArrayList<>();
     this.aliveCitizenUsernames = new ArrayList<>();
+  }
+
+  public ArrayList<String> getUsernamesWhoCanChat() {
+    return this.usernamesWhoCanChat;
+  }
+
+  public void setUsernamesWhoChat(ArrayList<String> usernames) {
+    this.usernamesWhoCanChat = usernames;
+  }
+
+  public void clearReadyPlayersToBeginVoting() {
+    this.readyPlayersToBeginVoting.clear();
+  }
+
+  public void addToReadyPlayersToBeginVoting(String username) {
+    this.readyPlayersToBeginVoting.add(username);
+  }
+
+  public Set<String> getReadyPlayersToBeginVoting() {
+    return this.readyPlayersToBeginVoting;
   }
 
   public void setIsThereAnyUserOnline(boolean status) {
