@@ -10,7 +10,13 @@
 
 ### Run server side code
 
+#### Bellow command will start `4` game servers on ports `2222,3333,4444,5555` that clients can connect.
+
 > java -cp .;gson-2.8.6.jar Main
+
+<br>
+
+#### Bellow command will lauch only `1` server on port `3333` that clients can connect.
 
 > java -cp .;gson-2.8.6.jar GameServer 33333
 
@@ -25,8 +31,6 @@
 ### Run client side code
 
 > java -cp .;gson-2.8.6.jar GameClient localhost 3333
-
-#
 
 ## Compile in VsCode
 
