@@ -9,7 +9,7 @@
 				"args": [
 					"-cp",
 					".;gson-2.8.6.jar",
-					"GameServer.java"
+					"Main.java"
 				]
 			},
 			"presentation": {
