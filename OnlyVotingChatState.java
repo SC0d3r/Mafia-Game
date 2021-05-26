@@ -16,7 +16,7 @@ public class OnlyVotingChatState extends ServerState {
     this.gameServer.getGameState().initVotingChoices(choices);
     this.gameServer.sendGameStateToClients();
 
-    UTIL.setTimerFor(10, this.gameServer.getReadyPlayers());
+    UTIL.setTimerFor(30, this.gameServer.getReadyPlayers());
 
     this.gameServer.getGameState().setIsVotingEnabled(false);
     this.gameServer.sendGameStateToClients();
