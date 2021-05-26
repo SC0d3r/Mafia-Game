@@ -59,7 +59,13 @@ public class WriteThread extends Thread {
     boolean isUserAdded = false;
     String username = "";
     while (!isUserAdded) {
-      username = console.readLine("\nEnter Username: ");
+      username = console.readLine("Enter Username: ").trim();
+
+      // is username already taken
+      if (this.client.getGameState().getUsernames().contains(username)) {
+        System.out.println("This username is already taken pick another one.");
+        continue;
+      }
 
       if (!this.isUsernameValid(username)) {
         System.out.println("Valid username must start with text and can have numbers.");

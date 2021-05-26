@@ -173,6 +173,14 @@ class GameServer {
         this.userThreads.add(newUser);
         newUser.start();
 
+        UTIL.sleep(10);
+
+        // these 3 lines are for if a user joins after another user doesnt take the
+        // already taken usernames
+        GameState newState = new GameState();
+        newState.setUsernames(this.gameState.getUsernames());
+        newUser.sendMessage(this.dataSender.createGameState(newState));
+
       }
     } catch (IOException ex) {
       if (this.isDebugModeOn) {
@@ -304,6 +312,10 @@ class GameServer {
   }
 
   public void killUser(UserThread user) {
+    // these 2 lines are for if a user leaves a new user can take his username
+    this.gameState.removeUsername(user.getUsername());
+    this.broadcast(this.dataSender.createGameState(this.gameState), null);
+
     Player p = this.getPlayerByUsername(user.getUsername());
     if (p != null) { // p is null when game is not yet started
       System.out.println(ROLE.toString(p.getRole()) + " left the game");

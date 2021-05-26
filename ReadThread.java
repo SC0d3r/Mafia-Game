@@ -196,8 +196,10 @@ public class ReadThread extends Thread {
     if (this.client.getUsername() != null) {
       this.printSeperator();
       System.out.print(this.client.getUsername() + ": ");
-    } else
+    } else {
+      GameServer.clrscr();
       System.out.print("Enter username: ");
+    }
   }
 
   private void printAvailableTargets() {

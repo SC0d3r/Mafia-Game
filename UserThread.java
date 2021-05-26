@@ -44,8 +44,13 @@ public class UserThread extends Thread {
       this.writer = new PrintWriter(output, true);
 
       username = reader.readLine();
-
       this.username = username.trim();
+
+      // bellow lines are for to make sure the usernames are unique
+      this.gameServer.getGameState().addUsername(this.username);
+      String gameStateCMD = this.dataSender.createGameState(this.gameServer.getGameState());
+      this.gameServer.broadcast(gameStateCMD, null);
+
       String serverMessage = "New User Connected: " + username;
       String newUserConnected = this.dataSender.createChatCommand("__ " + username + " Connected to lobby __");
       this.gameServer.broadcast(newUserConnected, this);

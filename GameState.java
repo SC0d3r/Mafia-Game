@@ -23,12 +23,14 @@ public class GameState implements Serializable {
   private boolean isInIntroductionState;
   private boolean isDrCitySavedHimselfAllready;
   private boolean isGameFinished;
+  private ArrayList<String> usernames;
   private ArrayList<String> alivePlayerUsernames;
   private ArrayList<String> aliveMafiaUsernames;
   private ArrayList<String> aliveCitizenUsernames;
   private volatile HashMap<String, String> votes;
 
   public GameState() {
+    this.usernames = new ArrayList<>();// this field is for make sure that usernames in game is unique
     this.isGameFinished = false;
     this.isInPsychologistState = false;
     this.isInProfessionalState = false;
@@ -54,6 +56,22 @@ public class GameState implements Serializable {
     this.alivePlayerUsernames = new ArrayList<>();
     this.aliveMafiaUsernames = new ArrayList<>();
     this.aliveCitizenUsernames = new ArrayList<>();
+  }
+
+  public void setUsernames(ArrayList<String> usernames) {
+    this.usernames = usernames;
+  }
+
+  public ArrayList<String> getUsernames() {
+    return this.usernames;
+  }
+
+  public void addUsername(String username) {
+    this.usernames.add(username);
+  }
+
+  public void removeUsername(String username) {
+    this.usernames.remove(username);
   }
 
   public void setIsGameFinished(boolean status) {
