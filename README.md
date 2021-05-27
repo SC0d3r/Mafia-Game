@@ -1,5 +1,23 @@
 # Mafia Console Game
 
+## Some screen shots of the game
+
+### Chat room during day
+
+![chat in game](./images/chat.png)
+
+### Voting process
+
+![voting in game](./images/vote.png)
+
+### News section
+
+![news section in game](./images/news.png)
+
+### God father role
+
+![god father decisions in game](./images/god-father.png)
+
 ## Server Side
 
 ### Compile server side code
