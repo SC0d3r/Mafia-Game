@@ -1,7 +1,5 @@
 # Mafia Console Game
 
-## Some screen shots of the game
-
 ### Chat room during day
 
 ![chat in game](./images/chat.png)
